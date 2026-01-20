@@ -9,6 +9,9 @@ const VideoGrid = ({ videos }) => {
                 videoId = url.split('v=')[1].split('&')[0];
             } else if (url.includes('youtu.be/')) {
                 videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/shorts/')) {
+                // Support for YouTube Shorts
+                videoId = url.split('shorts/')[1].split('?')[0];
             }
             return `https://www.youtube.com/embed/${videoId}`;
         } catch (e) {
