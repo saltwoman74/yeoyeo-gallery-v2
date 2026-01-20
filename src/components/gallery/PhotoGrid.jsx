@@ -89,6 +89,12 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
                                 className="w-full h-full object-cover"
                                 loading="lazy"
                             />
+                            {/* Label showing complex and type */}
+                            {img.displayName && (
+                                <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md">
+                                    {img.displayName}
+                                </div>
+                            )}
                             {/* Overlay */}
                             <div className={`absolute inset-0 bg-black/40 transition-opacity flex items-center justify-center ${isSelected ? 'opacity-100' : 'opacity-0 hover:opacity-100'}`}>
                                 {isSelected ? (
