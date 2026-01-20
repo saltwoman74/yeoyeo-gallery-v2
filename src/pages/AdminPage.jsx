@@ -46,14 +46,19 @@ const AdminPage = () => {
 
             for (const complex of complexes) {
                 for (const type of types[complex]) {
-                    const path = `complex_${complex}/${type}`;
-                    const data = await listImages(path);
-                    allImages.push(...data.map(img => ({
-                        ...img,
-                        complex,
-                        type,
-                        displayName: `${complex}단지 ${type}평`
-                    })));
+                    try {
+                        const path = `complex_${complex}/${type}`;
+                        const data = await listImages(path);
+                        allImages.push(...data.map(img => ({
+                            ...img,
+                            complex,
+                            type,
+                            displayName: `${complex}단지 ${type}평`
+                        })));
+                    } catch (error) {
+                        // Skip empty folders or errors
+                        console.log(`Skipping ${complex}/${type}:`, error.message);
+                    }
                 }
             }
 
