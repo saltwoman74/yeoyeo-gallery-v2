@@ -11,7 +11,7 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
     useEffect(() => {
         const fetchImages = async () => {
             setLoading(true);
-            const data = await listImages(`${complex}/${type}`);
+            const data = await listImages(`complex_${complex}/${type}`);
             setImages(data);
             setLoading(false);
         };
@@ -93,8 +93,8 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
                                 onClick={handleCompare}
                                 disabled={selectedIds.length !== 2}
                                 className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedIds.length === 2
-                                        ? 'bg-gold-500 text-navy-950 hover:bg-gold-400 hover:scale-105 shadow-lg shadow-gold-500/20'
-                                        : 'bg-navy-800 text-gray-500 cursor-not-allowed'
+                                    ? 'bg-gold-500 text-navy-950 hover:bg-gold-400 hover:scale-105 shadow-lg shadow-gold-500/20'
+                                    : 'bg-navy-800 text-gray-500 cursor-not-allowed'
                                     }`}
                             >
                                 {selectedIds.length === 2 ? 'Start Comparison' : 'Select 2 to Compare'}
