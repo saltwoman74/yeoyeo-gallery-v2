@@ -124,11 +124,23 @@ export const deleteImage = async (key) => {
     }
 };
 
-// Video functions - use localStorage instead of S3
+// Video functions - use Supabase for cross-device sync
+import { supabase } from '../lib/supabase';
+
 export const listVideos = async () => {
     try {
-        const stored = localStorage.getItem('yeoyeo-videos');
-        return stored ? JSON.parse(stored) : [];
+        const { data, error } = await supabase
+            .from('videos')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Supabase error loading videos:', error);
+            return [];
+        }
+
+        console.log('Loaded videos from Supabase:', data);
+        return data || [];
     } catch (error) {
         console.error('Error loading videos:', error);
         return [];
@@ -137,15 +149,19 @@ export const listVideos = async () => {
 
 export const addVideo = async (title, url) => {
     try {
-        const videos = await listVideos();
-        const newVideo = {
-            id: Date.now().toString(),
-            title,
-            url
-        };
-        const updated = [...videos, newVideo];
-        localStorage.setItem('yeoyeo-videos', JSON.stringify(updated));
-        return { success: true, video: newVideo };
+        const { data, error } = await supabase
+            .from('videos')
+            .insert([{ title, url }])
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Supabase error adding video:', error);
+            throw error;
+        }
+
+        console.log('Video added to Supabase:', data);
+        return { success: true, video: data };
     } catch (error) {
         console.error('Error adding video:', error);
         throw error;
@@ -154,9 +170,17 @@ export const addVideo = async (title, url) => {
 
 export const deleteVideo = async (id) => {
     try {
-        const videos = await listVideos();
-        const updated = videos.filter(v => v.id !== id);
-        localStorage.setItem('yeoyeo-videos', JSON.stringify(updated));
+        const { error } = await supabase
+            .from('videos')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Supabase error deleting video:', error);
+            throw error;
+        }
+
+        console.log('Video deleted from Supabase:', id);
         return { success: true };
     } catch (error) {
         console.error('Error deleting video:', error);
