@@ -335,7 +335,7 @@ const RealEstateChatbot = () => {
     const handleStart = () => setViewState('categories');
 
     const handleOpenImageApp = () => {
-        window.open('https://unicity-iota.vercel.app', '_blank');
+        window.open('https://yeoyeo-gallery-v2.vercel.app', '_blank');
     };
 
     const handleCategorySelect = (categoryKey) => {
