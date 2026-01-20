@@ -60,6 +60,7 @@ const VideoGrid = ({ videos }) => {
                             width="100%"
                             height="100%"
                             frameBorder="0"
+                            sandbox="allow-scripts allow-same-origin allow-presentation"
                             referrerPolicy="no-referrer-when-downgrade"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen
