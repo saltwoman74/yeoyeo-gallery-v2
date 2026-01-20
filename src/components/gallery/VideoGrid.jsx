@@ -3,21 +3,42 @@ import React from 'react';
 const VideoGrid = ({ videos }) => {
     const getEmbedUrl = (url) => {
         try {
-            // Simple parser for standard youtube URLs
+            // Normalize URL - handle both youtube.com and www.youtube.com
+            const normalizedUrl = url.toLowerCase().trim();
             let videoId = '';
-            if (url.includes('youtube.com/watch?v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            } else if (url.includes('youtube.com/shorts/')) {
-                // Support for YouTube Shorts
-                videoId = url.split('shorts/')[1].split('?')[0];
+
+            // Method 1: Standard watch URL (youtube.com/watch?v=VIDEO_ID or www.youtube.com/watch?v=VIDEO_ID)
+            if (normalizedUrl.includes('youtube.com/watch')) {
+                const urlParams = new URLSearchParams(normalizedUrl.split('?')[1]);
+                videoId = urlParams.get('v') || '';
             }
-            return `https://www.youtube.com/embed/${videoId}`;
+            // Method 2: Short URL (youtu.be/VIDEO_ID)
+            else if (normalizedUrl.includes('youtu.be/')) {
+                videoId = normalizedUrl.split('youtu.be/')[1].split('?')[0].split('&')[0];
+            }
+            // Method 3: YouTube Shorts (youtube.com/shorts/VIDEO_ID or www.youtube.com/shorts/VIDEO_ID)
+            else if (normalizedUrl.includes('/shorts/')) {
+                videoId = normalizedUrl.split('/shorts/')[1].split('?')[0].split('&')[0];
+            }
+
+            // Clean video ID (remove any remaining query parameters or fragments)
+            videoId = videoId.split('?')[0].split('&')[0].split('#')[0];
+
+            if (!videoId) {
+                console.error('Failed to extract video ID from URL:', url);
+                return '';
+            }
+
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0&modestbranding=1`;
+            console.log('Generated embed URL for video ID:', videoId, '→', embedUrl);
+            return embedUrl;
         } catch (e) {
+            console.error('Error parsing YouTube URL:', url, e);
             return '';
         }
     };
+
+    console.log('VideoGrid rendering with videos:', videos);
 
     if (!videos || videos.length === 0) {
         return (
@@ -36,8 +57,13 @@ const VideoGrid = ({ videos }) => {
                             src={getEmbedUrl(video.url)}
                             title={video.title}
                             className="absolute inset-0 w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen
+                            style={{ border: 'none' }}
                         />
                     </div>
                     <div className="p-4">
