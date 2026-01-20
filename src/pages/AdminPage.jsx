@@ -75,10 +75,15 @@ const AdminPage = () => {
         setVideos(data);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (key) => {
         if (window.confirm('Are you sure you want to delete this image? (삭제하시겠습니까?)')) {
-            await deleteImage(id);
-            setImages(images.filter(img => img.id !== id));
+            try {
+                await deleteImage(key);
+                setImages(images.filter(img => img.key !== key));
+                alert('Image deleted successfully! (이미지가 삭제되었습니다!)');
+            } catch (error) {
+                console.error('Delete failed:', error);
+            }
         }
     };
 

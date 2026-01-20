@@ -16,6 +16,7 @@ const GalleryPage = () => {
     const [selectedComplex, setSelectedComplex] = useState(null);
     const [selectedType, setSelectedType] = useState(null);
     const [compareImages, setCompareImages] = useState(null);
+    const [viewAll, setViewAll] = useState(false); // New: view all images
 
     const [videos, setVideos] = useState([]);
 
@@ -30,7 +31,9 @@ const GalleryPage = () => {
     const types = selectedComplex ? COMPLEX_TYPES[selectedComplex] : [];
 
     const handleBack = () => {
-        if (selectedType) {
+        if (viewAll) {
+            setViewAll(false);
+        } else if (selectedType) {
             setSelectedType(null);
         } else if (selectedComplex) {
             setSelectedComplex(null);
@@ -135,7 +138,7 @@ const GalleryPage = () => {
                     )}
 
                     {/* PHOTO GALLERY MODE */}
-                    {activeTab === 'photos' && !selectedComplex && (
+                    {activeTab === 'photos' && !selectedComplex && !viewAll && (
                         <motion.div
                             key="complex-list"
                             initial={{ opacity: 0, y: 20 }}
@@ -145,6 +148,17 @@ const GalleryPage = () => {
                             <div className="mb-12 text-center md:text-left">
                                 <h2 className="text-4xl md:text-5xl font-bold mb-4">Select Complex</h2>
                                 <p className="text-gray-400 font-light">Choose a residential complex to explore offering units.</p>
+                            </div>
+
+                            {/* All Images Button */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => setViewAll(true)}
+                                    className="w-full bg-gradient-to-r from-gold-500 to-gold-600 text-navy-950 font-bold py-4 px-6 rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all shadow-lg hover:shadow-gold-500/20"
+                                >
+                                    <span className="text-lg">🖼️ View All Images (전체 이미지 보기)</span>
+                                    <p className="text-xs mt-1 opacity-80">Compare images across all complexes</p>
+                                </button>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -157,6 +171,23 @@ const GalleryPage = () => {
                                     />
                                 ))}
                             </div>
+                        </motion.div>
+                    )}
+
+                    {/* View All Images */}
+                    {activeTab === 'photos' && viewAll && (
+                        <motion.div
+                            key="all-images"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, x: -50 }}
+                        >
+                            <h2 className="text-3xl font-bold mb-6">All Images (전체 이미지)</h2>
+                            <PhotoGrid
+                                complex="all"
+                                type="all"
+                                onCompare={startComparison}
+                            />
                         </motion.div>
                     )}
 

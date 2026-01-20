@@ -11,8 +11,40 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
     useEffect(() => {
         const fetchImages = async () => {
             setLoading(true);
-            const data = await listImages(`complex_${complex}/${type}`);
-            setImages(data);
+
+            if (complex === 'all') {
+                // Load all images from all complexes
+                const allImages = [];
+                const complexes = ['1', '2', '3', '4'];
+                const types = {
+                    '1': ['25', '30', '35A', '35B', '41', '47', '56A', '56B'],
+                    '2': ['25', '30', '35A', '35B', '41'],
+                    '3': ['25', '30', '35A', '35B', '41'],
+                    '4': ['25', '30', '35A', '35B', '41', '48', '56A', '56B']
+                };
+
+                for (const c of complexes) {
+                    for (const t of types[c]) {
+                        try {
+                            const path = `complex_${c}/${t}`;
+                            const data = await listImages(path);
+                            allImages.push(...data.map(img => ({
+                                ...img,
+                                displayName: `${c}단지 ${t}평`
+                            })));
+                        } catch (error) {
+                            // Skip empty folders
+                            console.log(`Skipping ${c}/${t}`);
+                        }
+                    }
+                }
+                setImages(allImages);
+            } else {
+                // Load images from specific complex/type
+                const data = await listImages(`complex_${complex}/${type}`);
+                setImages(data);
+            }
+
             setLoading(false);
         };
         fetchImages();
