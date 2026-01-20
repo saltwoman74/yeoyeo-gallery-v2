@@ -72,7 +72,20 @@ const AdminPage = () => {
 
     const loadVideos = async () => {
         const data = await listVideos();
-        setVideos(data);
+
+        // Filter out image URLs and invalid URLs
+        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+        const validVideos = data.filter(video => {
+            return video.url && youtubeRegex.test(video.url);
+        });
+
+        // If we filtered out any invalid videos, update storage
+        if (validVideos.length !== data.length) {
+            localStorage.setItem('yeoyeo-videos', JSON.stringify(validVideos));
+            console.log(`Removed ${data.length - validVideos.length} invalid video URLs`);
+        }
+
+        setVideos(validVideos);
     };
 
     const handleDelete = async (key) => {
