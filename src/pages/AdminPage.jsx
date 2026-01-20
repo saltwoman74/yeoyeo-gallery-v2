@@ -33,8 +33,35 @@ const AdminPage = () => {
 
     const loadImages = async () => {
         setLoadingImages(true);
-        const data = await listImages('all'); // Mock fetch
-        setImages(data);
+        try {
+            // Load images from all complexes and types
+            const allImages = [];
+            const complexes = ['1', '2', '3', '4'];
+            const types = {
+                '1': ['25', '30', '35A', '35B', '41', '47', '56A', '56B'],
+                '2': ['25', '30', '35A', '35B', '41'],
+                '3': ['25', '30', '35A', '35B', '41'],
+                '4': ['25', '30', '35A', '35B', '41', '48', '56A', '56B']
+            };
+
+            for (const complex of complexes) {
+                for (const type of types[complex]) {
+                    const path = `complex_${complex}/${type}`;
+                    const data = await listImages(path);
+                    allImages.push(...data.map(img => ({
+                        ...img,
+                        complex,
+                        type,
+                        displayName: `${complex}단지 ${type}평`
+                    })));
+                }
+            }
+
+            setImages(allImages);
+        } catch (error) {
+            console.error('Failed to load images:', error);
+            setImages([]);
+        }
         setLoadingImages(false);
     };
 
@@ -246,19 +273,35 @@ const AdminPage = () => {
                             </div>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                {images.map(img => (
-                                    <div key={img.id} className="group relative aspect-square bg-navy-800 rounded-xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all">
-                                        <img src={img.url} alt="gallery" className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                                            <p className="text-[10px] text-gray-300 truncate mb-2">{img.key}</p>
-                                            <div className="flex gap-2">
-                                                <button onClick={() => handleDelete(img.id)} className="flex-1 bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white py-1.5 rounded text-[10px] font-bold transition-colors">
-                                                    Delete 삭제
+                                {loadingImages ? (
+                                    <div className="col-span-full text-center py-20 text-gold-500">
+                                        <RefreshCcw className="w-8 h-8 animate-spin mx-auto mb-2" />
+                                        <p>Loading images...</p>
+                                    </div>
+                                ) : images.length === 0 ? (
+                                    <div className="col-span-full text-center py-20 text-gray-500">
+                                        <p>No images uploaded yet</p>
+                                        <p className="text-sm mt-2">업로드된 이미지가 없습니다</p>
+                                    </div>
+                                ) : (
+                                    images.map(img => (
+                                        <div key={img.id} className="group relative aspect-square bg-navy-800 rounded-xl overflow-hidden border border-white/5 hover:border-gold-500/50 transition-all">
+                                            <img src={img.url} alt={img.displayName || 'Gallery'} className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="absolute bottom-0 left-0 right-0 p-3">
+                                                    <p className="text-xs text-white font-bold">{img.displayName}</p>
+                                                    <p className="text-[10px] text-gray-400 truncate">{img.key}</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleDelete(img.key)}
+                                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-colors shadow-lg"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                )}
                             </div>
                             {images.length === 0 && !loadingImages && (
                                 <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-2xl">
