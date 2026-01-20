@@ -124,15 +124,42 @@ export const deleteImage = async (key) => {
     }
 };
 
-// Video functions (same as image functions for S3)
-export const listVideos = async (folderPath) => {
-    return listImages(folderPath);
+// Video functions - use localStorage instead of S3
+export const listVideos = async () => {
+    try {
+        const stored = localStorage.getItem('yeoyeo-videos');
+        return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+        console.error('Error loading videos:', error);
+        return [];
+    }
 };
 
-export const addVideo = async (file, folderPath) => {
-    return uploadImage(file, folderPath);
+export const addVideo = async (title, url) => {
+    try {
+        const videos = await listVideos();
+        const newVideo = {
+            id: Date.now().toString(),
+            title,
+            url
+        };
+        const updated = [...videos, newVideo];
+        localStorage.setItem('yeoyeo-videos', JSON.stringify(updated));
+        return { success: true, video: newVideo };
+    } catch (error) {
+        console.error('Error adding video:', error);
+        throw error;
+    }
 };
 
-export const deleteVideo = async (key) => {
-    return deleteImage(key);
+export const deleteVideo = async (id) => {
+    try {
+        const videos = await listVideos();
+        const updated = videos.filter(v => v.id !== id);
+        localStorage.setItem('yeoyeo-videos', JSON.stringify(updated));
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting video:', error);
+        throw error;
+    }
 };
