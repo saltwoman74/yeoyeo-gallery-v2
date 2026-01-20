@@ -96,7 +96,28 @@ const AdminPage = () => {
 
     const handleAddVideo = async (e) => {
         e.preventDefault();
-        if (!videoTitle || !videoUrl) return alert('Please enter title and URL');
+
+        // Validate YouTube URL
+        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+        const imageRegex = /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i;
+
+        // Check if it's an image URL
+        if (imageRegex.test(videoUrl)) {
+            alert('이미지 URL은 추가할 수 없습니다. 유튜브 영상 URL만 입력해주세요.\n\nImage URLs cannot be added. Please enter YouTube video URLs only.');
+            return;
+        }
+
+        // Check if it's a valid YouTube URL
+        if (!youtubeRegex.test(videoUrl)) {
+            alert('올바른 유튜브 URL을 입력해주세요.\n예: https://www.youtube.com/watch?v=...\n\nPlease enter a valid YouTube URL.\nExample: https://www.youtube.com/watch?v=...');
+            return;
+        }
+
+        if (!videoTitle.trim() || !videoUrl.trim()) {
+            alert('제목과 URL을 모두 입력해주세요.\n\nPlease enter both title and URL.');
+            return;
+        }
+
         await addVideo(videoTitle, videoUrl);
         alert('Video Added!');
         setVideoTitle('');
