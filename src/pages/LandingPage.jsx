@@ -45,8 +45,8 @@ const LandingPage = () => {
               <div className="w-12 h-1 bg-gold-500 rounded-full" />
             </div>
             <h2 className="text-gold-400 tracking-[0.5em] text-xs font-bold uppercase mb-4">Changwon UniCity</h2>
-            <h1 className="text-5xl md:text-7xl font-sans font-bold text-white mb-2 tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-gold-300 via-gold-500 to-gold-700 drop-shadow-sm font-serif">여여부동산</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">
+              <span className="text-gold-500 font-sans">여여부동산</span>
               <span className="block text-xl md:text-2xl mt-4 font-light text-gray-300 tracking-[0.2em]">PREMIUM GALLERY</span>
             </h1>
           </motion.div>
