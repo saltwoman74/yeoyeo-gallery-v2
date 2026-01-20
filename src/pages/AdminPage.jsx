@@ -283,6 +283,17 @@ const AdminPage = () => {
                                 </form>
 
                                 {/* Clear All Videos Button */}
+                                <button
+                                    onClick={() => {
+                                        localStorage.removeItem('yeoyeo-videos');
+                                        window.location.reload();
+                                    }}
+                                    className="mt-4 bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white font-bold px-6 py-3 rounded-lg transition-colors w-full"
+                                >
+                                    🗑️ Clear All Videos (모든 영상 삭제)
+                                </button>
+
+                                {/* Clear All Videos Button */}
                                 {videos.length > 0 && (
                                     <button
                                         onClick={() => {
