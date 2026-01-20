@@ -110,7 +110,51 @@ const GalleryPage = () => {
 
             {/* Main Content Area */}
             <div className="max-w-7xl mx-auto">
-                {activeTab === 'photos' && (selectedComplex || selectedType) && (
+                {/* Quick Navigation Bar - Always visible in photos mode */}
+                {activeTab === 'photos' && (
+                    <div className="mb-6 flex flex-wrap gap-3 items-center justify-between bg-navy-900/50 backdrop-blur-md border border-white/10 p-4 rounded-xl">
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                onClick={() => {
+                                    setViewAll(true);
+                                    setSelectedComplex(null);
+                                    setSelectedType(null);
+                                }}
+                                className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${viewAll
+                                        ? 'bg-gold-500 text-navy-950'
+                                        : 'bg-navy-800 text-white hover:bg-navy-700'
+                                    }`}
+                            >
+                                🖼️ 전체 보기
+                            </button>
+
+                            {[1, 2, 3, 4].map(num => (
+                                <button
+                                    key={num}
+                                    onClick={() => {
+                                        setViewAll(false);
+                                        setSelectedComplex(num);
+                                        setSelectedType(null);
+                                    }}
+                                    className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${selectedComplex === num && !viewAll
+                                            ? 'bg-gold-500 text-navy-950'
+                                            : 'bg-navy-800 text-white hover:bg-navy-700'
+                                        }`}
+                                >
+                                    {num}단지
+                                </button>
+                            ))}
+                        </div>
+
+                        {selectedComplex && !viewAll && (
+                            <div className="text-sm text-gray-400">
+                                {selectedType ? `${selectedType}평` : '평형 선택'}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {(selectedComplex || selectedType || viewAll) && activeTab === 'photos' && (
                     <button
                         onClick={handleBack}
                         className="mb-8 text-gold-500 hover:text-gold-400 flex items-center gap-2 font-medium"
