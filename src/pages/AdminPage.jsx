@@ -281,6 +281,22 @@ const AdminPage = () => {
                                         Add Video 등록
                                     </button>
                                 </form>
+
+                                {/* Clear All Videos Button */}
+                                {videos.length > 0 && (
+                                    <button
+                                        onClick={() => {
+                                            if (window.confirm('모든 영상을 삭제하시겠습니까?\n\nDelete all videos?')) {
+                                                localStorage.removeItem('yeoyeo-videos');
+                                                setVideos([]);
+                                                alert('모든 영상이 삭제되었습니다!\n\nAll videos deleted!');
+                                            }
+                                        }}
+                                        className="mt-4 bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white font-bold px-6 py-3 rounded-lg transition-colors w-full md:w-auto"
+                                    >
+                                        🗑️ Clear All Videos (모두 삭제)
+                                    </button>
+                                )}
                             </div>
 
                             <div className="grid gap-4">
