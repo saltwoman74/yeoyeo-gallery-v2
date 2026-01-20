@@ -90,8 +90,8 @@ export const listImages = async (folderPath) => {
 
         if (!response.Contents) return [];
 
-        return response.Contents.map((item, index) => ({
-            id: `${index}`,
+        return response.Contents.map((item) => ({
+            id: item.Key, // Use S3 key as stable ID instead of index
             url: `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${item.Key}`,
             key: item.Key
         }));
