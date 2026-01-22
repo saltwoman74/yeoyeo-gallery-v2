@@ -16,7 +16,10 @@ const GalleryPage = () => {
     const [selectedComplex, setSelectedComplex] = useState(null);
     const [selectedType, setSelectedType] = useState(null);
     const [compareImages, setCompareImages] = useState(null);
-    const [viewAll, setViewAll] = useState(false); // New: view all images
+    const [viewAll, setViewAll] = useState(false);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [isCompareMode, setIsCompareMode] = useState(false); // New: Workflow state
+    const [replacingSide, setReplacingSide] = useState(null); // 'left' or 'right'
 
     const [videos, setVideos] = useState([]);
 
@@ -25,6 +28,17 @@ const GalleryPage = () => {
             listVideos().then(setVideos);
         }
     }, [activeTab]);
+
+    // Auto-open comparison when 2 images are selected in Compare Mode
+    useEffect(() => {
+        if (isCompareMode && selectedImages.length === 2) {
+            // Small delay for visual effect
+            setTimeout(() => {
+                setCompareImages({ left: selectedImages[0], right: selectedImages[1] });
+            }, 500);
+        }
+    }, [selectedImages, isCompareMode]);
+
 
     // ... existing constants ...
     const complexes = [1, 2, 3, 4];
@@ -42,6 +56,32 @@ const GalleryPage = () => {
 
     const startComparison = (left, right) => {
         setCompareImages({ left, right });
+    };
+
+    const toggleImageSelection = (img) => {
+        // If replacing an image in the slider
+        if (replacingSide) {
+            setCompareImages(prev => ({
+                ...prev,
+                [replacingSide]: img
+            }));
+
+            // Update selected list for consistency (optional but good)
+            // Logic: Remove the old one from that side? Actually selectedImages tracks the *initial* pair.
+            // Let's just update the list to match the current slider state roughly.
+            // Simplified: Just close the overlay.
+            setReplacingSide(null);
+            return;
+        }
+
+        // Normal Compare Mode Selection
+        if (selectedImages.find(i => i.id === img.id)) {
+            setSelectedImages(selectedImages.filter(i => i.id !== img.id));
+        } else {
+            if (selectedImages.length < 2) {
+                setSelectedImages([...selectedImages, img]);
+            }
+        }
     };
 
     return (
@@ -72,6 +112,21 @@ const GalleryPage = () => {
                 </div>
 
                 <div className="flex gap-4">
+                    {/* Compare Mode Toggle */}
+                    {activeTab === 'photos' && (
+                        <button
+                            onClick={() => {
+                                setIsCompareMode(!isCompareMode);
+                                setSelectedImages([]); // Reset on toggle
+                            }}
+                            className={`px-4 py-2 rounded-lg font-bold text-xs uppercase transition-all flex items-center gap-2 border ${isCompareMode
+                                ? 'bg-gold-500 text-navy-950 border-gold-500 shadow-lg shadow-gold-500/20'
+                                : 'bg-transparent text-gold-500 border-gold-500 hover:bg-gold-500/10'}`}
+                        >
+                            {isCompareMode ? 'Exit Compare Mode' : 'Start Comparison'}
+                        </button>
+                    )}
+
                     {/* Mode Toggles */}
                     <div className="bg-navy-900 border border-white/10 rounded-lg p-1 flex">
                         <button
@@ -97,14 +152,62 @@ const GalleryPage = () => {
                 </div>
             </header>
 
-            {/* Comparison Overlay */}
+            {/* Status Bar for Compare Mode */}
+            <AnimatePresence>
+                {isCompareMode && !compareImages && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed top-24 left-0 right-0 z-40 flex justify-center pointer-events-none"
+                    >
+                        <div className="bg-navy-900/90 backdrop-blur border border-gold-500/30 text-gold-500 px-6 py-2 rounded-full shadow-xl flex items-center gap-3">
+                            <span className="font-bold text-sm">COMPARE MODE</span>
+                            <div className="h-4 w-px bg-white/20"></div>
+                            <span className="text-white text-sm">
+                                {selectedImages.length === 0 && "Select 1st Image"}
+                                {selectedImages.length === 1 && "Select 2nd Image"}
+                                {selectedImages.length === 2 && "Auto-starting..."}
+                            </span>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Comparison Overlay with Swap Logic */}
             <AnimatePresence>
                 {compareImages && (
                     <ComparisonSlider
                         leftImage={compareImages.left}
                         rightImage={compareImages.right}
                         onClose={() => setCompareImages(null)}
+                        onRequestReplace={(side) => setReplacingSide(side)}
                     />
+                )}
+            </AnimatePresence>
+
+            {/* Swap Image Selector Overlay */}
+            <AnimatePresence>
+                {replacingSide && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] bg-navy-950/95 backdrop-blur-xl flex flex-col p-6"
+                    >
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold text-white">Select Image for {replacingSide === 'left' ? 'Left' : 'Right'} Side</h2>
+                            <button onClick={() => setReplacingSide(null)} className="p-2 hover:bg-white/10 rounded-full bg-white/5 text-white">Close</button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto">
+                            <PhotoGrid
+                                complex="all"
+                                type="all"
+                                selectedIds={[]}
+                                onToggleSelection={toggleImageSelection} // Will trigger swap logic
+                            />
+                        </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
 
@@ -121,8 +224,8 @@ const GalleryPage = () => {
                                     setSelectedType(null);
                                 }}
                                 className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${viewAll
-                                        ? 'bg-gold-500 text-navy-950'
-                                        : 'bg-navy-800 text-white hover:bg-navy-700'
+                                    ? 'bg-gold-500 text-navy-950'
+                                    : 'bg-navy-800 text-white hover:bg-navy-700'
                                     }`}
                             >
                                 🖼️ 전체 보기
@@ -137,8 +240,8 @@ const GalleryPage = () => {
                                         setSelectedType(null);
                                     }}
                                     className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${selectedComplex === num && !viewAll
-                                            ? 'bg-gold-500 text-navy-950'
-                                            : 'bg-navy-800 text-white hover:bg-navy-700'
+                                        ? 'bg-gold-500 text-navy-950'
+                                        : 'bg-navy-800 text-white hover:bg-navy-700'
                                         }`}
                                 >
                                     {num}단지
@@ -231,6 +334,8 @@ const GalleryPage = () => {
                                 complex="all"
                                 type="all"
                                 onCompare={startComparison}
+                                selectedIds={selectedImages.map(i => i.id)}
+                                onToggleSelection={toggleImageSelection}
                             />
                         </motion.div>
                     )}
@@ -275,10 +380,34 @@ const GalleryPage = () => {
                                 complex={selectedComplex}
                                 type={selectedType}
                                 onCompare={startComparison}
+                                selectedIds={selectedImages.map(i => i.id)}
+                                onToggleSelection={toggleImageSelection}
                             />
                         </motion.div>
                     )}
 
+                </AnimatePresence>
+
+                {/* Original Floating Action Bar - kept for fallback or specific manual usage */}
+                <AnimatePresence>
+                    {selectedImages.length > 0 && isCompareMode && (
+                        <motion.div
+                            initial={{ y: 100 }}
+                            animate={{ y: 0 }}
+                            exit={{ y: 100 }}
+                            className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4"
+                        >
+                            <div className="bg-navy-900/90 backdrop-blur-md border border-gold-500/50 rounded-full px-8 py-4 shadow-2xl flex items-center gap-6">
+                                <span className="text-sm font-bold text-gray-300">
+                                    <span className="text-gold-500 text-lg mr-1">{selectedImages.length}</span>
+                                    selected
+                                </span>
+                                <span className="text-xs text-white/50">
+                                    {selectedImages.length === 2 ? "Ready!" : "Select more..."}
+                                </span>
+                            </div>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
             </div>
         </div>

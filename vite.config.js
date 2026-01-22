@@ -34,7 +34,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true, // Listen on all addresses
-    strictPort: true, // Fail if port is busy
+    strictPort: false, // Allow fallback if port is busy
   },
   build: {
     rollupOptions: {

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Minimize2 } from 'lucide-react';
 
-const ComparisonSlider = ({ leftImage, rightImage, onClose }) => {
+const ComparisonSlider = ({ leftImage, rightImage, onClose, onRequestReplace }) => {
     const [sliderPosition, setSliderPosition] = useState(50);
     const containerRef = useRef(null);
     const isDragging = useRef(false);
@@ -66,8 +66,18 @@ const ComparisonSlider = ({ leftImage, rightImage, onClose }) => {
                         className="absolute inset-0 w-full h-full object-cover"
                         draggable="false"
                     />
-                    <div className="absolute top-4 right-4 bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
-                        Target B
+                    <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
+                        <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
+                            Target B {rightImage.displayName ? `(${rightImage.displayName})` : ''}
+                        </div>
+                        {onRequestReplace && (
+                            <button
+                                onClick={() => onRequestReplace('right')}
+                                className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg"
+                            >
+                                Change
+                            </button>
+                        )}
                     </div>
 
                     {/* Left Image (Clipped) - "Before" */}
@@ -81,8 +91,18 @@ const ComparisonSlider = ({ leftImage, rightImage, onClose }) => {
                             className="absolute inset-0 w-full h-full object-cover"
                             draggable="false"
                         />
-                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
-                            Target A
+                        <div className="absolute top-4 left-4 z-20 flex flex-col items-start gap-2">
+                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
+                                Target A {leftImage.displayName ? `(${leftImage.displayName})` : ''}
+                            </div>
+                            {onRequestReplace && (
+                                <button
+                                    onClick={() => onRequestReplace('left')}
+                                    className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg"
+                                >
+                                    Change
+                                </button>
+                            )}
                         </div>
                     </div>
 

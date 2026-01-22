@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Maximize2 } from 'lucide-react';
 import { listImages } from '../../services/s3Service';
 
-const PhotoGrid = ({ complex, type, onCompare }) => {
+const PhotoGrid = ({ complex, type, onCompare, selectedIds = [], onToggleSelection }) => {
     const [images, setImages] = useState([]);
-    const [selectedIds, setSelectedIds] = useState([]);
+    // Removed local selectedIds state
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -50,19 +50,11 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
         fetchImages();
     }, [complex, type]);
 
-    const toggleSelection = (id) => {
-        if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter(sid => sid !== id));
-        } else {
-            if (selectedIds.length < 2) {
-                setSelectedIds([...selectedIds, id]);
-            }
+    // Updated handler to use prop
+    const toggleSelection = (img) => {
+        if (onToggleSelection) {
+            onToggleSelection(img);
         }
-    };
-
-    const handleCompare = () => {
-        const selectedImages = images.filter(img => selectedIds.includes(img.id));
-        onCompare(selectedImages[0], selectedImages[1]);
     };
 
     if (loading) {
@@ -80,7 +72,7 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             whileHover={{ scale: 1.02 }}
-                            onClick={() => toggleSelection(img.id)}
+                            onClick={() => toggleSelection(img)}
                             className={`relative aspect-video rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${isSelected ? 'border-gold-500 ring-4 ring-gold-500/20' : 'border-transparent hover:border-white/20'}`}
                         >
                             <img
@@ -111,36 +103,6 @@ const PhotoGrid = ({ complex, type, onCompare }) => {
                     );
                 })}
             </div>
-
-            {/* Floating Action Bar */}
-            <AnimatePresence>
-                {selectedIds.length > 0 && (
-                    <motion.div
-                        initial={{ y: 100 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: 100 }}
-                        className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4"
-                    >
-                        <div className="bg-navy-900/90 backdrop-blur-md border border-white/10 rounded-full px-8 py-4 shadow-2xl flex items-center gap-6">
-                            <span className="text-sm font-bold text-gray-300">
-                                <span className="text-gold-500 text-lg mr-1">{selectedIds.length}</span>
-                                selected
-                            </span>
-
-                            <button
-                                onClick={handleCompare}
-                                disabled={selectedIds.length !== 2}
-                                className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${selectedIds.length === 2
-                                    ? 'bg-gold-500 text-navy-950 hover:bg-gold-400 hover:scale-105 shadow-lg shadow-gold-500/20'
-                                    : 'bg-navy-800 text-gray-500 cursor-not-allowed'
-                                    }`}
-                            >
-                                {selectedIds.length === 2 ? 'Start Comparison' : 'Select 2 to Compare'}
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

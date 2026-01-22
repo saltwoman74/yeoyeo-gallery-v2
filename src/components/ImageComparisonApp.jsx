@@ -15,6 +15,7 @@ const ImageComparisonApp = ({ onBack, onAdmin }) => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [showComparison, setShowComparison] = useState(false);
     const [mediaType, setMediaType] = useState('image'); // image, video
+    const [changingSide, setChangingSide] = useState(null); // 'left' (0) or 'right' (1)
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -323,6 +324,39 @@ const ImageComparisonApp = ({ onBack, onAdmin }) => {
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] bg-slate-950 flex flex-col"
                     >
+                        {/* Selector Overlay */}
+                        {changingSide !== null && (
+                            <div className="absolute inset-0 z-[110] bg-slate-950/90 backdrop-blur-xl flex flex-col">
+                                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-900">
+                                    <h3 className="text-lg font-bold">Select Image for {changingSide === 0 ? 'Left' : 'Right'} Side</h3>
+                                    <button onClick={() => setChangingSide(null)} className="p-2 hover:bg-white/10 rounded-full"><X /></button>
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                    {data.filter(d => d.mediaType === 'image').map(img => (
+                                        <button
+                                            key={img.id}
+                                            onClick={() => {
+                                                const newSelection = [...selectedImages];
+                                                newSelection[changingSide] = img;
+                                                setSelectedImages(newSelection);
+                                                setChangingSide(null);
+                                            }}
+                                            className="group relative aspect-video rounded-lg overflow-hidden border border-white/10 hover:border-indigo-500 transition-all"
+                                        >
+                                            <img src={img.url} className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-black/50 p-2 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <p className="text-xs font-bold">{img.complex}</p>
+                                                <p className="text-[10px] text-slate-300">{img.type}</p>
+                                            </div>
+                                            {selectedImages.find(i => i.id === img.id) && (
+                                                <div className="absolute top-2 right-2 bg-indigo-600 text-white p-1 rounded-full"><CheckCircle className="w-3 h-3" /></div>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Modal Header */}
                         <div className="p-4 md:p-6 bg-slate-900 border-b border-white/10 flex justify-between items-center">
                             <div className="flex items-center gap-4">
@@ -334,7 +368,9 @@ const ImageComparisonApp = ({ onBack, onAdmin }) => {
                                 </button>
                                 <div>
                                     <h2 className="text-xl font-bold luxury-text">Image Comparison</h2>
-                                    <p className="text-xs text-slate-400">{selectedComplex} {selectedType} / {PHOTO_CATEGORIES.find(c => c.id === selectedCategory)?.kr}</p>
+                                    <p className="text-xs text-slate-400">
+                                        {selectedImages[0].complex} {selectedImages[0].type} vs {selectedImages[1].complex} {selectedImages[1].type}
+                                    </p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
@@ -368,14 +404,31 @@ const ImageComparisonApp = ({ onBack, onAdmin }) => {
                                     </div>
                                 </img-comparison-slider>
 
-                                {/* Labels */}
-                                <div className="absolute top-6 left-6 z-10 px-4 py-2 bg-black/60 backdrop-blur-md rounded-lg border border-white/10">
-                                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-0.5">Left</p>
-                                    <p className="text-sm font-bold text-white">Target A</p>
+                                {/* Labels & Controls */}
+                                <div className="absolute top-6 left-6 z-10 flex items-start gap-2">
+                                    <div className="px-4 py-2 bg-black/60 backdrop-blur-md rounded-lg border border-white/10">
+                                        <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-0.5">Left</p>
+                                        <p className="text-sm font-bold text-white">{selectedImages[0].complex} {selectedImages[0].type}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setChangingSide(0)}
+                                        className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg transition-colors"
+                                    >
+                                        Change
+                                    </button>
                                 </div>
-                                <div className="absolute top-6 right-6 z-10 px-4 py-2 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 text-right">
-                                    <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-0.5">Right</p>
-                                    <p className="text-sm font-bold text-white">Target B</p>
+
+                                <div className="absolute top-6 right-6 z-10 flex items-start gap-2 flex-row-reverse text-right">
+                                    <div className="px-4 py-2 bg-black/60 backdrop-blur-md rounded-lg border border-white/10">
+                                        <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-0.5">Right</p>
+                                        <p className="text-sm font-bold text-white">{selectedImages[1].complex} {selectedImages[1].type}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setChangingSide(1)}
+                                        className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg transition-colors"
+                                    >
+                                        Change
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -385,7 +438,7 @@ const ImageComparisonApp = ({ onBack, onAdmin }) => {
                             <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between gap-6">
                                 <div className="space-y-1">
                                     <h3 className="text-lg font-bold">비교 가이드</h3>
-                                    <p className="text-sm text-slate-400">중앙의 핸들을 좌우로 드래그하여 두 이미지의 차이점을 확인하세요. 마우스 휠이나 제스처로 확대가 가능합니다.</p>
+                                    <p className="text-sm text-slate-400">중앙의 핸들을 좌우로 드래그하여 두 이미지의 차이점을 확인하세요. 'Change' 버튼을 눌러 다른 단지의 이미지와 비교할 수 있습니다.</p>
                                 </div>
                                 <div className="flex gap-4 items-center">
                                     <button className="flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-xl font-bold text-xs">
