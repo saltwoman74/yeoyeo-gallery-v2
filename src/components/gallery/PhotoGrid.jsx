@@ -12,19 +12,20 @@ const PhotoGrid = ({ complex, type, onCompare, selectedIds = [], onToggleSelecti
         const fetchImages = async () => {
             setLoading(true);
 
+            const typesConfig = {
+                '1': ['25', '30', '35A', '35B', '41', '47', '56A', '56B'],
+                '2': ['25', '30', '35A', '35B', '41'],
+                '3': ['25', '30', '35A', '35B', '41'],
+                '4': ['25', '30', '35A', '35B', '41', '48', '56A', '56B']
+            };
+
             if (complex === 'all') {
                 // Load all images from all complexes
                 const allImages = [];
                 const complexes = ['1', '2', '3', '4'];
-                const types = {
-                    '1': ['25', '30', '35A', '35B', '41', '47', '56A', '56B'],
-                    '2': ['25', '30', '35A', '35B', '41'],
-                    '3': ['25', '30', '35A', '35B', '41'],
-                    '4': ['25', '30', '35A', '35B', '41', '48', '56A', '56B']
-                };
 
                 for (const c of complexes) {
-                    for (const t of types[c]) {
+                    for (const t of typesConfig[c]) {
                         try {
                             const path = `complex_${c}/${t}`;
                             const data = await listImages(path);
@@ -39,8 +40,26 @@ const PhotoGrid = ({ complex, type, onCompare, selectedIds = [], onToggleSelecti
                     }
                 }
                 setImages(allImages);
+            } else if (type === 'all') {
+                // Load ALL types for a SPECIFIC complex (New Logic)
+                const complexTypes = typesConfig[complex] || [];
+                const complexImages = [];
+
+                for (const t of complexTypes) {
+                    try {
+                        const path = `complex_${complex}/${t}`;
+                        const data = await listImages(path);
+                        complexImages.push(...data.map(img => ({
+                            ...img,
+                            displayName: `${complex}단지 ${t}평`
+                        })));
+                    } catch (error) {
+                        console.log(`Skipping ${complex}/${t}`);
+                    }
+                }
+                setImages(complexImages);
             } else {
-                // Load images from specific complex/type
+                // Load images from specific complex/type (Original Logic)
                 const data = await listImages(`complex_${complex}/${type}`);
                 setImages(data);
             }
