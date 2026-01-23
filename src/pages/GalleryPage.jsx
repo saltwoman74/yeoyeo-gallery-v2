@@ -20,6 +20,7 @@ const GalleryPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [isCompareMode, setIsCompareMode] = useState(false); // New: Workflow state
     const [replacingSide, setReplacingSide] = useState(null); // 'left' or 'right'
+    const [swapComplex, setSwapComplex] = useState(null); // New: Complex selection for swap
     const [viewingImage, setViewingImage] = useState(null); // New: Full screen viewer state
 
     const [videos, setVideos] = useState([]);
@@ -188,7 +189,10 @@ const GalleryPage = () => {
                         leftImage={compareImages.left}
                         rightImage={compareImages.right}
                         onClose={() => setCompareImages(null)}
-                        onRequestReplace={(side) => setReplacingSide(side)}
+                        onRequestReplace={(side) => {
+                            setReplacingSide(side);
+                            setSwapComplex(null);
+                        }}
                     />
                 )}
             </AnimatePresence>
@@ -207,12 +211,43 @@ const GalleryPage = () => {
                             <button onClick={() => setReplacingSide(null)} className="p-2 hover:bg-white/10 rounded-full bg-white/5 text-white">Close</button>
                         </div>
                         <div className="flex-1 overflow-y-auto">
-                            <PhotoGrid
-                                complex="all"
-                                type="all"
-                                selectedIds={[]}
-                                onToggleSelection={toggleImageSelection} // Will trigger swap logic
-                            />
+                            {!swapComplex ? (
+                                <div className="flex flex-col gap-4 h-full justify-center max-w-2xl mx-auto w-full">
+                                    <h3 className="text-xl text-center mb-4 text-gray-400">Choose Complex (단지 선택)</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {[1, 2, 3, 4].map(num => (
+                                            <button
+                                                key={num}
+                                                onClick={() => setSwapComplex(num)}
+                                                className="bg-navy-800 hover:bg-gold-500 hover:text-navy-950 border border-white/10 p-8 rounded-xl text-2xl font-bold transition-all shadow-lg hover:shadow-gold-500/20"
+                                            >
+                                                {num}단지
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <button
+                                        onClick={() => setSwapComplex('all')}
+                                        className="bg-navy-900 border border-gold-500/30 text-gold-500 p-6 rounded-xl hover:bg-gold-500/10 font-bold transition-all"
+                                    >
+                                        View All Images (전체 보기)
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="min-h-full flex flex-col">
+                                    <button
+                                        onClick={() => setSwapComplex(null)}
+                                        className="self-start mb-6 sticky top-0 z-10 bg-navy-950/80 backdrop-blur px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 text-gold-500 hover:text-white transition-colors"
+                                    >
+                                        <ChevronLeft className="w-4 h-4" /> Back to Complex Selection
+                                    </button>
+                                    <PhotoGrid
+                                        complex={swapComplex}
+                                        type="all"
+                                        selectedIds={[]}
+                                        onToggleSelection={toggleImageSelection}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 )}
