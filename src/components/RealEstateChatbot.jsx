@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, TrendingUp, DollarSign, FileText, Calculator, Home, ChevronRight, ArrowLeft, Send } from 'lucide-react';
+import { MessageCircle, TrendingUp, DollarSign, FileText, Calculator, Home, ChevronRight, ArrowLeft, Send, Sparkles } from 'lucide-react';
 
 const GEMINI_API_KEY_DEFAULT = 'gen-lang-client-0102368272';
 const GOOGLE_SHEET_ID_DEFAULT = '1Ajn0VVRqQfpjEimzmW7yorf7ecL9RKpXWpsCNj2QhsE';
@@ -380,23 +380,32 @@ const RealEstateChatbot = () => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col font-sans border border-gray-100">
+        <div className="w-full max-w-md mx-auto h-[600px] bg-gradient-to-br from-purple-50 via-white to-blue-50 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col font-sans border-2 border-purple-100/50">
             {/* Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white shrink-0 relative">
+            <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-blue-500 p-6 text-white shrink-0 relative rounded-t-[2.5rem] shadow-lg">
                 <div className="flex items-center gap-3">
-                    <div className="bg-white/20 p-2 rounded-full backdrop-blur-sm">
-                        <MessageCircle className="w-6 h-6 text-white" />
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-white/30 rounded-full blur-xl"></div>
+                        <div className="relative bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/30 shadow-lg">
+                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                                <div className="w-8 h-6 bg-purple-600 rounded-full relative">
+                                    <div className="absolute top-1 left-1.5 w-1.5 h-1.5 bg-white rounded-full"></div>
+                                    <div className="absolute top-1 right-1.5 w-1.5 h-1.5 bg-white rounded-full"></div>
+                                    <div className="absolute bottom-1 left-2 right-2 h-1 bg-white rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold">창원 부동산 AI</h1>
-                        <p className="text-xs text-indigo-100 opacity-90">무엇이든 물어보세요</p>
+                        <h1 className="text-xl font-bold tracking-tight">창원 부동산 AI</h1>
+                        <p className="text-xs text-purple-100 opacity-90 font-medium">무엇이든 물어보세요</p>
                     </div>
                 </div>
                 {/* Home Button needed if deep in navigation */}
                 {viewState !== 'initial' && (
                     <button
                         onClick={resetToHome}
-                        className="absolute top-6 right-6 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                        className="absolute top-6 right-6 p-2.5 bg-white/10 rounded-full hover:bg-white/20 transition-all duration-300 backdrop-blur-sm border border-white/20 shadow-lg hover:scale-110"
                     >
                         <Home className="w-5 h-5" />
                     </button>
@@ -404,14 +413,18 @@ const RealEstateChatbot = () => {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
 
                 {/* 1. Initial View */}
                 {viewState === 'initial' && (
-                    <div className="h-full flex flex-col justify-center items-center space-y-8 animate-fade-in">
-                        <div className="text-center space-y-2">
-                            <h2 className="text-2xl font-bold text-gray-800">안녕하세요! 👋</h2>
-                            <p className="text-gray-500">
+                    <div className="h-full flex flex-col justify-center items-center space-y-6 animate-fade-in">
+                        <div className="text-center space-y-3">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-2">
+                                <Sparkles className="w-4 h-4 text-purple-600" />
+                                <span className="text-sm font-semibold text-purple-700">AI 상담사</span>
+                            </div>
+                            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">안녕하세요! 👋</h2>
+                            <p className="text-gray-500 leading-relaxed">
                                 창원 유니시티 부동산 전문가입니다.<br />
                                 궁금한 점을 선택해주세요.
                             </p>
@@ -419,38 +432,41 @@ const RealEstateChatbot = () => {
 
                         <button
                             onClick={handleStart}
-                            className="w-full py-4 px-6 bg-white border-2 border-indigo-100 rounded-2xl shadow-sm hover:border-indigo-500 hover:shadow-md transition-all group flex items-center justify-between"
+                            className="w-full py-5 px-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group flex items-center justify-between hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="bg-indigo-100 p-3 rounded-xl text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                                    <FileText className="w-6 h-6" />
+                                <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm border border-white/30">
+                                    <FileText className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="text-left">
-                                    <span className="block font-bold text-gray-800 text-lg">자주 묻는 질문</span>
-                                    <span className="text-xs text-gray-500">지식 기반 FAQ</span>
+                                    <span className="block font-bold text-white text-lg">자주 묻는 질문</span>
+                                    <span className="text-xs text-purple-100">지식 기반 FAQ</span>
                                 </div>
                             </div>
-                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-500" />
+                            <ChevronRight className="w-5 h-5 text-white/80 group-hover:translate-x-1 transition-transform" />
                         </button>
 
                         <button
                             onClick={handleOpenImageApp}
-                            className="w-full py-4 px-6 bg-white border-2 border-pink-100 rounded-2xl shadow-sm hover:border-pink-500 hover:shadow-md transition-all group flex items-center justify-between"
+                            className="w-full py-5 px-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 group flex items-center justify-between border-2 border-purple-100 hover:border-purple-300 hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="bg-pink-100 p-3 rounded-xl text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-colors">
-                                    <Calculator className="w-6 h-6" />
+                                <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-3 rounded-xl shadow-md">
+                                    <Calculator className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="text-left">
                                     <span className="block font-bold text-gray-800 text-lg">이미지 비교 체험</span>
                                     <span className="text-xs text-gray-500">평형별·타입별 상세 비교</span>
                                 </div>
                             </div>
-                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-pink-500" />
+                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
                         </button>
 
-                        <div className="text-xs text-center text-gray-400 mt-auto">
-                            여여부동산 박혜경 소장 제공
+                        <div className="text-xs text-center text-gray-400 mt-auto pt-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-gray-100">
+                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                여여부동산 박혜경 소장 제공
+                            </div>
                         </div>
                     </div>
                 )}
@@ -458,25 +474,25 @@ const RealEstateChatbot = () => {
                 {/* 2. Categories View */}
                 {viewState === 'categories' && (
                     <div className="space-y-4 animate-fade-in-up">
-                        <h3 className="text-lg font-bold text-gray-800 mb-4 px-1">어떤 주제가 궁금하신가요?</h3>
+                        <h3 className="text-xl font-bold text-gray-800 mb-6 px-1">어떤 주제가 궁금하신가요?</h3>
                         {Object.entries(knowledgeBase).map(([key, cat]) => {
                             const Icon = cat.icon;
                             return (
                                 <button
                                     key={key}
                                     onClick={() => handleCategorySelect(key)}
-                                    className="w-full p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all flex items-center justify-between group"
+                                    className="w-full p-5 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-between group border-2 border-transparent hover:border-purple-200 hover:scale-[1.02] active:scale-[0.98]"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl ${cat.color} text-white shadow-sm`}>
-                                            <Icon className="w-5 h-5" />
+                                        <div className={`p-3.5 rounded-xl ${cat.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                            <Icon className="w-6 h-6" />
                                         </div>
                                         <div className="text-left">
-                                            <span className="block font-bold text-gray-800">{cat.title}</span>
-                                            <span className="text-xs text-gray-500">{cat.description}</span>
+                                            <span className="block font-bold text-gray-800 text-base">{cat.title}</span>
+                                            <span className="text-xs text-gray-500 mt-0.5">{cat.description}</span>
                                         </div>
                                     </div>
-                                    <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-gray-600" />
+                                    <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
                                 </button>
                             );
                         })}
@@ -486,12 +502,12 @@ const RealEstateChatbot = () => {
                 {/* 3. Question List View */}
                 {viewState === 'question' && currentCategory && (
                     <div className="animate-slide-in-right">
-                        <button onClick={resetToCategories} className="flex items-center text-sm text-gray-500 mb-4 hover:text-indigo-600 transition-colors">
-                            <ArrowLeft className="w-4 h-4 mr-1" /> 주제 다시 선택
+                        <button onClick={resetToCategories} className="flex items-center gap-2 text-sm text-gray-500 mb-6 hover:text-purple-600 transition-colors px-3 py-2 rounded-lg hover:bg-purple-50">
+                            <ArrowLeft className="w-4 h-4" /> 주제 다시 선택
                         </button>
 
-                        <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                            {React.createElement(knowledgeBase[currentCategory].icon, { className: "w-6 h-6 text-indigo-600" })}
+                        <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                            {React.createElement(knowledgeBase[currentCategory].icon, { className: "w-7 h-7 text-purple-600" })}
                             {knowledgeBase[currentCategory].title.split(' (')[0]}
                         </h3>
 
@@ -500,9 +516,9 @@ const RealEstateChatbot = () => {
                                 <button
                                     key={q.id}
                                     onClick={() => handleQuestionSelect(q)}
-                                    className="w-full text-left p-4 bg-white rounded-xl border-l-4 border-indigo-500 shadow-sm hover:shadow hover:bg-indigo-50 transition-all"
+                                    className="w-full text-left p-4 bg-white rounded-xl border-l-4 border-purple-500 shadow-md hover:shadow-lg hover:bg-gradient-to-r hover:from-purple-50 hover:to-transparent transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]"
                                 >
-                                    <span className="font-medium text-gray-800">{q.q}</span>
+                                    <span className="font-semibold text-gray-800 leading-relaxed">{q.q}</span>
                                 </button>
                             ))}
                         </div>
@@ -512,32 +528,43 @@ const RealEstateChatbot = () => {
                 {/* 4. Answer View */}
                 {viewState === 'answer' && currentQuestion && (
                     <div className="animate-fade-in space-y-6">
-                        <button onClick={resetToQuestions} className="flex items-center text-sm text-gray-500 hover:text-indigo-600 transition-colors">
-                            <ArrowLeft className="w-4 h-4 mr-1" /> 다른 질문 보기
+                        <button onClick={resetToQuestions} className="flex items-center gap-2 text-sm text-gray-500 hover:text-purple-600 transition-colors px-3 py-2 rounded-lg hover:bg-purple-50">
+                            <ArrowLeft className="w-4 h-4" /> 다른 질문 보기
                         </button>
 
                         {/* Question Bubble */}
                         <div className="flex justify-end">
-                            <div className="bg-indigo-600 text-white px-5 py-3 rounded-2xl rounded-tr-sm shadow-md max-w-[90%]">
-                                {currentQuestion.q}
+                            <div className="bg-gradient-to-br from-purple-500 to-blue-500 text-white px-5 py-3.5 rounded-2xl rounded-tr-md shadow-lg max-w-[85%]">
+                                <p className="leading-relaxed">{currentQuestion.q}</p>
                             </div>
                         </div>
 
                         {/* Answer Bubble */}
                         <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shrink-0">
-                                AI
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-blue-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-lg border-2 border-white">
+                                <div className="w-6 h-5 bg-white rounded-full relative">
+                                    <div className="absolute top-1 left-1 w-1 h-1 bg-purple-600 rounded-full"></div>
+                                    <div className="absolute top-1 right-1 w-1 h-1 bg-purple-600 rounded-full"></div>
+                                    <div className="absolute bottom-0.5 left-1.5 right-1.5 h-0.5 bg-purple-600 rounded-full"></div>
+                                </div>
                             </div>
-                            <div className="bg-white p-5 rounded-2xl rounded-tl-sm shadow-md border border-gray-100 text-gray-700 leading-relaxed text-sm whitespace-pre-wrap max-w-[90%]">
+                            <div className="bg-white p-5 rounded-2xl rounded-tl-md shadow-lg border-2 border-purple-100 text-gray-700 leading-relaxed text-sm whitespace-pre-wrap max-w-[85%]">
                                 {currentQuestion.a}
                             </div>
                         </div>
 
                         {/* Follow-up Suggestions */}
                         {currentQuestion.followUp && currentQuestion.followUp.length > 0 && (
-                            <div className="mt-8">
-                                <p className="text-xs text-center text-gray-400 mb-3 uppercase tracking-wider font-semibold">이어서 보면 좋은 내용</p>
-                                <div className="flex flex-col gap-2">
+                            <div className="mt-8 pt-6 border-t-2 border-purple-100">
+                                <div className="flex items-center justify-center gap-2 mb-4">
+                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-200"></div>
+                                    <p className="text-xs text-purple-600 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                        이어서 보면 좋은 내용
+                                    </p>
+                                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-200"></div>
+                                </div>
+                                <div className="flex flex-col gap-2.5">
                                     {currentQuestion.followUp.map(id => {
                                         let suggestion = null;
                                         // Find the suggested question
@@ -554,10 +581,10 @@ const RealEstateChatbot = () => {
                                             <button
                                                 key={id}
                                                 onClick={() => handleFollowUp(id)}
-                                                className="w-full text-sm text-indigo-600 bg-indigo-50 p-3 rounded-lg border border-indigo-100 hover:bg-indigo-100 transition-colors text-left flex justify-between items-center"
+                                                className="w-full text-sm text-purple-700 bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl border-2 border-purple-200 hover:border-purple-400 hover:shadow-md transition-all duration-300 text-left flex justify-between items-center group hover:scale-[1.01] active:scale-[0.99]"
                                             >
-                                                {suggestion.q}
-                                                <ArrowLeft className="w-3 h-3 rotate-180" />
+                                                <span className="font-medium">{suggestion.q}</span>
+                                                <ChevronRight className="w-4 h-4 text-purple-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
                                             </button>
                                         )
                                     })}
@@ -569,14 +596,14 @@ const RealEstateChatbot = () => {
             </div>
 
             {/* Footer / Input Placeholder (Visual only) */}
-            <div className="p-4 bg-white border-t border-gray-100">
+            <div className="p-4 bg-white/80 backdrop-blur-sm border-t-2 border-purple-100">
                 <a
                     href="https://blog.naver.com/yiyo5800"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full text-center py-3 rounded-xl bg-gray-100 text-gray-500 text-sm font-medium hover:bg-gray-200 transition-colors"
+                    className="block w-full text-center py-3.5 rounded-xl bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 text-sm font-bold hover:from-purple-200 hover:to-blue-200 transition-all duration-300 shadow-sm hover:shadow-md border-2 border-purple-200 hover:border-purple-300 hover:scale-[1.01] active:scale-[0.99]"
                 >
-                    원하는 답변이 없나요? 전문가에게 문의하기
+                    💬 원하는 답변이 없나요? 전문가에게 문의하기
                 </a>
             </div>
         </div>

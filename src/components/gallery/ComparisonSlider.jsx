@@ -66,20 +66,6 @@ const ComparisonSlider = ({ leftImage, rightImage, onClose, onRequestReplace }) 
                         className="absolute inset-0 w-full h-full object-cover"
                         draggable="false"
                     />
-                    <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
-                        <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
-                            Target B {rightImage.displayName ? `(${rightImage.displayName})` : ''}
-                        </div>
-                        {onRequestReplace && (
-                            <button
-                                onClick={() => onRequestReplace('right')}
-                                className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg"
-                            >
-                                Change
-                            </button>
-                        )}
-                    </div>
-
                     {/* Left Image (Clipped) - "Before" */}
                     <div
                         className="absolute inset-0 w-full h-full overflow-hidden"
@@ -91,19 +77,38 @@ const ComparisonSlider = ({ leftImage, rightImage, onClose, onRequestReplace }) 
                             className="absolute inset-0 w-full h-full object-cover"
                             draggable="false"
                         />
-                        <div className="absolute top-4 left-4 z-20 flex flex-col items-start gap-2">
-                            <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
-                                Target A {leftImage.displayName ? `(${leftImage.displayName})` : ''}
-                            </div>
-                            {onRequestReplace && (
-                                <button
-                                    onClick={() => onRequestReplace('left')}
-                                    className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg"
-                                >
-                                    Change
-                                </button>
-                            )}
+                    </div>
+
+                    {/* Left Image Controls (Moved OUT of clip-path to fix Z-index/Clickability) */}
+                    <div className="absolute top-20 left-4 z-30 flex flex-col items-start gap-2">
+                        <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
+                            Target A {leftImage.displayName ? `(${leftImage.displayName})` : ''}
                         </div>
+                        {onRequestReplace && (
+                            <button
+                                onClick={() => onRequestReplace('left')}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg pointer-events-auto"
+                            >
+                                Change
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Right Image Controls (Moved here for Z-index stacking) */}
+                    <div className="absolute top-20 right-4 z-30 flex flex-col items-end gap-2">
+                        <div className="bg-black/50 backdrop-blur px-3 py-1 rounded text-xs font-bold text-white border border-white/10">
+                            Target B {rightImage.displayName ? `(${rightImage.displayName})` : ''}
+                        </div>
+                        {onRequestReplace && (
+                            <button
+                                onClick={() => onRequestReplace('right')}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                className="bg-gold-500 text-navy-950 px-3 py-1 rounded text-xs font-bold hover:bg-gold-400 transition-colors shadow-lg pointer-events-auto"
+                            >
+                                Change
+                            </button>
+                        )}
                     </div>
 
                     {/* Handle Line */}

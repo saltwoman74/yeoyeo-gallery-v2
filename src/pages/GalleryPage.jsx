@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../lib/store';
-import { LogOut, ChevronLeft, Image, Youtube } from 'lucide-react';
+import { LogOut, ChevronLeft, Image, Youtube, X } from 'lucide-react';
 import ComplexCard from '../components/gallery/ComplexCard';
 import PhotoGrid from '../components/gallery/PhotoGrid';
 import VideoGrid from '../components/gallery/VideoGrid'; // New Import
@@ -20,6 +20,7 @@ const GalleryPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [isCompareMode, setIsCompareMode] = useState(false); // New: Workflow state
     const [replacingSide, setReplacingSide] = useState(null); // 'left' or 'right'
+    const [viewingImage, setViewingImage] = useState(null); // New: Full screen viewer state
 
     const [videos, setVideos] = useState([]);
 
@@ -59,6 +60,12 @@ const GalleryPage = () => {
     };
 
     const toggleImageSelection = (img) => {
+        // If not in compare mode, and not replacing, open full screen viewer
+        if (!isCompareMode && !replacingSide) {
+            setViewingImage(img);
+            return;
+        }
+
         // If replacing an image in the slider
         if (replacingSide) {
             setCompareImages(prev => ({
@@ -207,6 +214,41 @@ const GalleryPage = () => {
                                 onToggleSelection={toggleImageSelection} // Will trigger swap logic
                             />
                         </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Full Screen Image Viewer */}
+            <AnimatePresence>
+                {viewingImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[70] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
+                        onClick={() => setViewingImage(null)}
+                    >
+                        <button
+                            onClick={() => setViewingImage(null)}
+                            className="absolute top-4 right-4 text-white hover:text-gold-500 transition-colors bg-white/10 rounded-full p-2 hover:bg-white/20 z-50"
+                        >
+                            <X className="w-8 h-8" />
+                        </button>
+
+                        <motion.img
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            src={viewingImage.url}
+                            alt="Full View"
+                            className="max-w-full max-h-full object-contain rounded-md shadow-2xl select-none"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+
+                        {viewingImage.displayName && (
+                            <div className="absolute bottom-6 md:bottom-10 bg-black/60 backdrop-blur-md px-6 py-3 rounded-full text-white text-base md:text-lg border border-white/10 shadow-xl">
+                                {viewingImage.displayName}
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
