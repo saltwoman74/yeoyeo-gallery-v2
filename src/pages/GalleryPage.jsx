@@ -95,13 +95,13 @@ const GalleryPage = () => {
     return (
         <div className="min-h-screen bg-navy-950 text-white p-6 md:p-12 relative">
             {/* Top Bar */}
-            <header className="flex justify-between items-center mb-8 relative z-10">
-                <div>
+            <header className="flex flex-col md:flex-row items-center md:items-start md:justify-between mb-8 relative z-10 gap-4">
+                <div className="text-center md:text-left">
                     <h1 className="text-xl md:text-2xl font-serif font-bold text-white tracking-tight whitespace-nowrap">
                         <span className="text-gold-500">여여부동산</span> <span className="text-white/50 font-light">/ Gallery</span>
                     </h1>
                     {/* Breadcrumbs */}
-                    <div className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                    <div className="text-sm text-gray-500 mt-1 flex items-center justify-center md:justify-start gap-2">
                         <button onClick={() => { setActiveTab('photos'); setSelectedComplex(null); }} className="hover:text-white transition-colors">Home</button>
                         {activeTab === 'videos' && <span className="text-gold-500"> / Videos</span>}
                         {activeTab === 'photos' && selectedComplex && (
@@ -119,8 +119,16 @@ const GalleryPage = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-4">
-                    {/* Compare Mode Toggle */}
+                <div className="flex flex-wrap gap-2 justify-center md:justify-end">
+                    {/* 1. Chatbot Shortcut - Moved to Header */}
+                    <button
+                        onClick={() => window.open('https://chatbot-p35x.vercel.app/', '_blank')}
+                        className="px-4 py-2 rounded-lg font-bold text-xs uppercase transition-all flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg hover:shadow-purple-500/20 border border-white/10"
+                    >
+                        <MessageCircle className="w-3 h-3" /> 챗봇 상담
+                    </button>
+
+                    {/* 2. Compare Mode Toggle */}
                     {activeTab === 'photos' && (
                         <button
                             onClick={() => {
@@ -131,11 +139,11 @@ const GalleryPage = () => {
                                 ? 'bg-gold-500 text-navy-950 border-gold-500 shadow-lg shadow-gold-500/20'
                                 : 'bg-transparent text-gold-500 border-gold-500 hover:bg-gold-500/10'}`}
                         >
-                            {isCompareMode ? 'Exit Compare Mode' : 'Start Comparison'}
+                            {isCompareMode ? '비교 모드 종료' : '이미지 비교 시작'}
                         </button>
                     )}
 
-                    {/* Mode Toggles */}
+                    {/* 3 & 4. Mode Toggles (Photos / Videos) */}
                     <div className="bg-navy-900 border border-white/10 rounded-lg p-1 flex">
                         <button
                             onClick={() => setActiveTab('photos')}
@@ -151,11 +159,12 @@ const GalleryPage = () => {
                         </button>
                     </div>
 
+                    {/* 5. Sign Out (Login/Admin) */}
                     <button
                         onClick={() => logout()}
-                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm uppercase tracking-wider"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white transition-colors text-xs uppercase tracking-wider border border-transparent hover:border-white/10"
                     >
-                        <LogOut className="w-4 h-4" /> Sign Out
+                        <LogOut className="w-3 h-3" /> 관리자 로그아웃
                     </button>
                 </div>
             </header>
@@ -434,9 +443,9 @@ const GalleryPage = () => {
                                         whileHover={{ scale: 1.05, borderColor: '#c5a059' }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => setSelectedType(type)}
-                                        className="bg-navy-900 border border-white/10 p-10 rounded-2xl cursor-pointer transition-colors text-center shadow-lg group"
+                                        className="bg-navy-900 border border-white/10 p-6 md:p-10 rounded-2xl cursor-pointer transition-colors text-center shadow-lg group"
                                     >
-                                        <span className="text-2xl font-bold group-hover:text-gold-500 transition-colors">{type}</span>
+                                        <span className="text-xl md:text-2xl font-bold group-hover:text-gold-500 transition-colors">{type}</span>
                                         <p className="text-xs text-gray-500 mt-2 uppercase tracking-wider">View Photos</p>
                                     </motion.div>
                                 ))}
@@ -488,20 +497,7 @@ const GalleryPage = () => {
                 </AnimatePresence>
             </div>
             {/* Chatbot FAB */}
-            <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => window.open('https://chatbot-p35x.vercel.app/', '_blank')} // Open external Chatbot
-                className="fixed bottom-8 right-6 z-[100] w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-purple-500/30 transition-all border-2 border-white/20"
-            >
-                <MessageCircle className="w-7 h-7" />
-                <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                </span>
-            </motion.button>
+
         </div>
     );
 };
