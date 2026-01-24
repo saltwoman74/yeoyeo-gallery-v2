@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../lib/store';
-import { LogOut, ChevronLeft, Image, Youtube, X } from 'lucide-react';
+import { LogOut, ChevronLeft, Image, Youtube, X, MessageCircle } from 'lucide-react';
 import ComplexCard from '../components/gallery/ComplexCard';
 import PhotoGrid from '../components/gallery/PhotoGrid';
 import VideoGrid from '../components/gallery/VideoGrid'; // New Import
@@ -487,6 +487,21 @@ const GalleryPage = () => {
                     )}
                 </AnimatePresence>
             </div>
+            {/* Chatbot FAB */}
+            <motion.button
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => window.open('https://chatbot-p35x.vercel.app/', '_blank')} // Open external Chatbot
+                className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-purple-500/30 transition-all border-2 border-white/20"
+            >
+                <MessageCircle className="w-7 h-7" />
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+            </motion.button>
         </div>
     );
 };

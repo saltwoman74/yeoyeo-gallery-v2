@@ -32,20 +32,26 @@ function App() {
 }
 
 const GlobalAdminButton = () => {
-  // We can use a hook from react-router to check path if we want to hide it on /admin
-  // but user asked for "every page".
-  // Let's hide it if we are already ON the admin page to avoid redundancy, 
-  // or keep it to allow "Re-login"? 
-  // Let's keep it simple: A discreet lock icon.
-
   return (
-    <a
-      href="/admin"
-      className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-md border border-white/10 rounded-full text-white/50 hover:text-gold-500 hover:bg-black/50 hover:border-gold-500/50 transition-all text-[10px] font-bold tracking-widest uppercase group"
-    >
-      <span className="hidden md:inline">Admin</span>
-      <span className="text-[9px] opacity-70 group-hover:opacity-100 group-hover:text-gold-400 font-normal ml-1">관리자</span>
-    </a>
+    <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+      {/* Home Button */}
+      <a
+        href="/"
+        className="flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-md border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-black/50 hover:border-white/30 transition-all text-[10px] font-bold tracking-widest uppercase group"
+      >
+        <span>HOME</span>
+        <span className="text-[9px] opacity-70 group-hover:opacity-100 font-normal ml-1 hidden md:inline">처음으로</span>
+      </a>
+
+      {/* Admin Button */}
+      <a
+        href="/admin"
+        className="flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-md border border-white/10 rounded-full text-white/50 hover:text-gold-500 hover:bg-black/50 hover:border-gold-500/50 transition-all text-[10px] font-bold tracking-widest uppercase group"
+      >
+        <span className="hidden md:inline">Admin</span>
+        <span className="text-[9px] opacity-70 group-hover:opacity-100 group-hover:text-gold-400 font-normal ml-1">관리자</span>
+      </a>
+    </div>
   );
 };
 
