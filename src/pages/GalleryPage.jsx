@@ -494,7 +494,7 @@ const GalleryPage = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => window.open('https://chatbot-p35x.vercel.app/', '_blank')} // Open external Chatbot
-                className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-purple-500/30 transition-all border-2 border-white/20"
+                className="fixed bottom-8 right-6 z-[100] w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-purple-500/30 transition-all border-2 border-white/20"
             >
                 <MessageCircle className="w-7 h-7" />
                 <span className="absolute -top-1 -right-1 flex h-3 w-3">
