@@ -5,6 +5,8 @@ import GalleryPage from './pages/GalleryPage';
 import AdminPage from './pages/AdminPage';
 import { useAuthStore } from './lib/store';
 
+import RealEstateChatbot from './components/RealEstateChatbot';
+
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return isAuthenticated ? children : <Navigate to="/" />;
@@ -16,6 +18,9 @@ function App() {
       <GlobalAdminButton />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/preview/chatbot" element={<RealEstateChatbot />} />
+        {/* Mobile App View (No Global Buttons) */}
+        <Route path="/mobile" element={<div className="h-screen w-full bg-white"><RealEstateChatbot /></div>} />
         <Route
           path="/gallery/*"
           element={
@@ -32,6 +37,9 @@ function App() {
 }
 
 const GlobalAdminButton = () => {
+  // Hide buttons on mobile app view
+  if (window.location.pathname === '/mobile') return null;
+
   return (
     <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
       {/* Home Button */}

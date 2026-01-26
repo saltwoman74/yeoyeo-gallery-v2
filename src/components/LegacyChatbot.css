@@ -1,0 +1,435 @@
+/* Legacy Chatbot CSS - Exact Port */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.legacy-chatbot-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    color: #333;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+/* 레이아웃 */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 좌측 사이드바 */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #7c3aed 0%, #6366f1 100%);
+    color: white;
+    padding: 25px 18px;
+    box-shadow: 4px 0 20px rgba(124, 58, 237, 0.15);
+    height: 100vh;
+    /* Fixed height for sticky behavior */
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tip-item {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tip-item:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateX(3px);
+}
+
+.tip-item h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.tip-item p {
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.site-link {
+    display: flex;
+    /* Changed to flex for alignment */
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.site-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(5px);
+}
+
+.site-link svg {
+    margin-right: 8px;
+}
+
+/* 메인 컨텐츠 */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* Full viewport height */
+    overflow: hidden;
+    /* Prevent body scroll */
+}
+
+/* 헤더 */
+.header {
+    background: white;
+    padding: 20px 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.header h1 {
+    font-size: 24px;
+    color: #667eea;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.admin-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-btn:hover {
+    background: #e0e0e0;
+}
+
+/* 챗봇 영역 */
+.chatbot-container {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: auto;
+    /* Scrollable container */
+}
+
+.chatbot-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    flex: 1;
+    /* Take available space */
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+    /* Minimum height */
+}
+
+.chatbot-header {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    color: white;
+    padding: 24px 25px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.chatbot-header h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* 메시지 영역 */
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+    background: #fafbfc;
+}
+
+.message {
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s;
+    display: flex;
+    width: 100%;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.bot {
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.bot-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #7c3aed, #6366f1, #3b82f6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    border: 2px solid white;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.message.bot .message-content {
+    background: #f3f4f6;
+    color: #333;
+    border-radius: 18px 18px 18px 4px;
+}
+
+.message.user .message-content {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+    color: white;
+    box-shadow: 0 2px 12px rgba(124, 58, 237, 0.2);
+    border-radius: 18px 18px 4px 18px;
+}
+
+/* 제안 버튼 */
+.suggestion-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.suggestion-btn {
+    background: white;
+    border: 2px solid #7c3aed;
+    color: #7c3aed;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.1);
+}
+
+.suggestion-btn:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+
+/* 입력 영역 */
+.input-area {
+    padding: 20px;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 12px;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 15px;
+}
+
+.input-area input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.input-area button {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    transition: all 0.3s ease;
+}
+
+.input-area button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+}
+
+/* 액션 버튼 */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 140px;
+    max-width: 160px;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn h3 {
+    font-size: 13px;
+    margin-bottom: 3px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.action-btn p {
+    font-size: 10px;
+    opacity: 0.85;
+    font-weight: 500;
+}
+
+.action-btn svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.action-btn.faq {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+    color: white;
+}
+
+.action-btn.image {
+    background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+    color: white;
+}
+
+.action-btn.link {
+    background: white;
+    color: #7c3aed;
+    border: 2px solid #e5e7eb;
+}
+
+.action-btn.call {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+}
+
+.action-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Typing Indicator */
+.typing-indicator span {
+    height: 8px;
+    width: 8px;
+    background: #667eea;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 2px;
+    animation: bounce 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-8px);
+    }
+}

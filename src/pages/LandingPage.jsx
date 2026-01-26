@@ -108,6 +108,12 @@ const LandingPage = () => {
         >
           Manage
         </button>
+        <button
+          onClick={() => navigate('/preview/chatbot')}
+          className="text-[10px] text-red-500 hover:text-red-700 transition-colors uppercase tracking-widest font-bold ml-4"
+        >
+          [Debug] Chatbot
+        </button>
       </motion.div>
     </div>
   );

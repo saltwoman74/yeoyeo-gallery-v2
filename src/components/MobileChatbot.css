@@ -1,0 +1,221 @@
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #e67e22; /* Premium Orange */
+    --accent-hover: #d35400;
+    --bg-color: #f4f6f9;
+    --sidebar-bg: #1a252f;
+    --text-color: #333;
+    --text-light: #ecf0f1;
+    --chat-bubble-user: #e67e22;
+    --chat-bubble-ai: #ffffff;
+    --border-color: #ddd;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --card-bg: #ffffff;
+}
+
+/* Scoped to .mobile-chatbot-container to avoid global conflicts in React app */
+.mobile-chatbot-container {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-chatbot-container * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.mobile-header {
+    background: white;
+    padding: 15px 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.mobile-header h1 {
+    font-size: 18px;
+    color: #667eea;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Chat Area */
+.mobile-chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Message Bubbles */
+.message {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.ai {
+    justify-content: flex-start;
+}
+
+.message-content {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.message.ai .message-content {
+    background: white;
+    color: #333;
+    border-radius: 16px 16px 16px 4px;
+    border: 1px solid #eee;
+}
+
+.message.user .message-content {
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%); /* Purple Gradient */
+    color: white;
+    border-radius: 16px 16px 4px 16px;
+}
+
+.message.system {
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.message.system .message-content {
+    background: rgba(0,0,0,0.05);
+    color: #666;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 12px;
+}
+
+/* Typing Indicator */
+.typing-indicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #b0b0b0;
+    border-radius: 50%;
+    animation: typing 1s infinite;
+    margin: 0 2px;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Input Area */
+.mobile-input-area {
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.mobile-input-area input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #f0f0f0;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.mobile-input-area input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.mobile-send-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(124, 58, 237, 0.3);
+}
+
+/* Action Buttons (The core feature user missed) */
+.mobile-actions {
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px 20px 15px; /* Extra bottom padding for mobile safely */
+    background: white;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar */
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 5px;
+    border-radius: 12px;
+    border: none;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: 1px solid #f0f0f0;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.action-btn svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+}
+
+.action-btn span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+}
+
+/* Specific Action Colors */
+.action-btn.faq svg { color: #7c3aed; }
+.action-btn.image svg { color: #ec4899; }
+.action-btn.site svg { color: #10b981; }
+.action-btn.call svg { color: #f97316; }
+
