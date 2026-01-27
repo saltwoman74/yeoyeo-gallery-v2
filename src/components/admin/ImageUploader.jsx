@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { UploadCloud, X, Check, Folder, AlertCircle } from 'lucide-react';
+import imageCompression from 'browser-image-compression';
 import { uploadImage } from '../../services/s3Service';
 import { COMPLEX_TYPES } from '../../constants';
 
@@ -40,7 +41,16 @@ const ImageUploader = () => {
             for (const file of files) {
                 const path = `complex_${selectedComplex}/${selectedType}`;
                 try {
-                    await uploadImage(file, path);
+                    // 항상 압축 수행
+                    const compressedFile = await imageCompression(file, {
+                        maxSizeMB: 0.6,
+                        maxWidthOrHeight: 1920,
+                        useWebWorker: true,
+                        quality: 0.75,
+                        fileType: 'image/webp'
+                    });
+
+                    await uploadImage(compressedFile, path);
                     successCount++;
                 } catch (err) {
                     console.error(err);
