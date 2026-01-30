@@ -4,7 +4,8 @@ import { ExternalLink } from 'lucide-react';
 const VideoGrid = ({ videos }) => {
     const getVideoId = (url) => {
         try {
-            const normalizedUrl = url.toLowerCase().trim();
+            // IDs are case sensitive, so we only trim
+            const normalizedUrl = url.trim();
             let videoId = '';
 
             if (normalizedUrl.includes('youtube.com/watch')) {
@@ -18,7 +19,10 @@ const VideoGrid = ({ videos }) => {
                 videoId = normalizedUrl.split('/shorts/')[1].split('?')[0].split('&')[0];
             }
 
-            videoId = videoId.split('?')[0].split('&')[0].split('#')[0];
+            if (videoId) {
+                videoId = videoId.split('?')[0].split('&')[0].split('#')[0];
+            }
+
             return videoId;
         } catch (e) {
             console.error('Error parsing YouTube URL:', url, e);
