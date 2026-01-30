@@ -242,40 +242,26 @@ const AdminPage = () => {
 
                     {activeTab === 'videos' && (
                         <div className="space-y-8">
-                            <div className="bg-navy-900/50 border border-white/5 rounded-2xl p-8">
-                                <h2 className="text-2xl font-serif font-bold mb-6 text-white flex items-center gap-2">
-                                    <Youtube className="text-red-500" /> Add YouTube Video
+                            <div className="bg-navy-900/50 border border-white/5 rounded-2xl p-8 text-center">
+                                <h2 className="text-2xl font-serif font-bold mb-4 text-white flex items-center justify-center gap-2">
+                                    <Youtube className="text-red-500" /> Video Management
                                 </h2>
-                                <form onSubmit={handleAddVideo} className="flex flex-col md:flex-row gap-4 items-end">
-                                    <div className="flex-1 w-full">
-                                        <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">Video Title (영상 제목)</label>
-                                        <input
-                                            value={videoTitle}
-                                            onChange={(e) => setVideoTitle(e.target.value)}
-                                            className="w-full bg-navy-950 border border-white/10 p-3 rounded-lg text-white"
-                                            placeholder="Ex: 1단지 조경 투어"
-                                        />
-                                    </div>
-                                    <div className="flex-1 w-full">
-                                        <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">YouTube URL (링크)</label>
-                                        <input
-                                            value={videoUrl}
-                                            onChange={(e) => setVideoUrl(e.target.value)}
-                                            className="w-full bg-navy-950 border border-white/10 p-3 rounded-lg text-white"
-                                            placeholder="https://www.youtube.com/watch?v=..."
-                                        />
-                                    </div>
-                                    <button className="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-6 py-3 rounded-lg transition-colors whitespace-nowrap w-full md:w-auto">
-                                        Add Video 등록
-                                    </button>
-                                </form>
-
-
+                                <div className="bg-blue-500/10 border border-blue-500/30 p-6 rounded-xl inline-block max-w-2xl">
+                                    <p className="text-blue-200 font-bold mb-2">ℹ️ Manage via Code (코드 관리 모드)</p>
+                                    <p className="text-sm text-gray-300">
+                                        Video list is now managed directly in the source code to ensure stability without database dependencies.
+                                        <br />
+                                        Please contact the administrator/developer to add or remove videos.
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-4 font-mono bg-black/30 p-2 rounded">
+                                        Source: src/data/videos.js
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="grid gap-4">
                                 {videos.map(video => (
-                                    <div key={video.id} className="bg-navy-800 border border-white/5 p-4 rounded-xl flex items-center justify-between">
+                                    <div key={video.id} className="bg-navy-800 border border-white/5 p-4 rounded-xl flex items-center justify-between opacity-80">
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-red-500">
                                                 <PlayCircle />
@@ -285,9 +271,6 @@ const AdminPage = () => {
                                                 <a href={video.url} target="_blank" rel="noreferrer" className="text-xs text-blue-400 hover:underline">{video.url}</a>
                                             </div>
                                         </div>
-                                        <button onClick={() => handleDeleteVideo(video.id)} className="text-gray-500 hover:text-red-500 transition-colors p-2">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
                                     </div>
                                 ))}
                             </div>

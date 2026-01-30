@@ -124,66 +124,20 @@ export const deleteImage = async (key) => {
     }
 };
 
-// Video functions - use Supabase for cross-device sync
-import { supabase } from '../lib/supabase';
+// Video functions - Managed via Code (src/data/videos.js)
+import { STATIC_VIDEOS } from '../data/videos';
 
 export const listVideos = async () => {
-    try {
-        const { data, error } = await supabase
-            .from('videos')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Supabase error loading videos:', error);
-            return [];
-        }
-
-        console.log('Loaded videos from Supabase:', data);
-        return data || [];
-    } catch (error) {
-        console.error('Error loading videos:', error);
-        return [];
-    }
+    // Return the static list from the code file
+    return STATIC_VIDEOS;
 };
 
 export const addVideo = async (title, url) => {
-    try {
-        const { data, error } = await supabase
-            .from('videos')
-            .insert([{ title, url }])
-            .select()
-            .single();
-
-        if (error) {
-            console.error('Supabase error adding video:', error);
-            throw error;
-        }
-
-        console.log('Video added to Supabase:', data);
-        return { success: true, video: data };
-    } catch (error) {
-        console.error('Error adding video:', error);
-        throw error;
-    }
+    alert("현재 '코드 직접 관리 모드'입니다.\n영상을 추가하려면 개발자에게 요청해주세요.\n(src/data/videos.js 파일 수정 필요)");
+    return { success: false };
 };
 
 export const deleteVideo = async (id) => {
-    try {
-        const { error } = await supabase
-            .from('videos')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            console.error('Supabase error deleting video:', error);
-            throw error;
-        }
-
-        console.log('Video deleted from Supabase:', id);
-        return { success: true };
-    } catch (error) {
-        console.error('Error deleting video:', error);
-        throw error;
-    }
+    alert("현재 '코드 직접 관리 모드'입니다.\n영상을 삭제하려면 개발자에게 요청해주세요.\n(src/data/videos.js 파일 수정 필요)");
+    return { success: false };
 };
