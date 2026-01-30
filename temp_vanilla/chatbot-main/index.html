@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<!-- Build: 2026.01.21-Rev2 - Force Vercel Update -->
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창원 유니시티 AI 상담 챗봇 - 여여부동산</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* 레이아웃 */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 좌측 사이드바 - 사용 팁 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #7c3aed 0%, #6366f1 100%);
+            color: white;
+            padding: 25px 18px;
+            box-shadow: 4px 0 20px rgba(124, 58, 237, 0.15);
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .tip-item {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateX(3px);
+        }
+
+        .tip-item h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .tip-item p {
+            font-size: 12px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .site-link {
+            display: block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .site-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .site-link span {
+            margin-right: 8px;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 헤더 */
+        .header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .admin-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .admin-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* 챗봇 영역 */
+        .chatbot-container {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .chatbot-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            padding: 24px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .chatbot-header h2 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chatbot-header p {
+            font-size: 13px;
+            opacity: 0.92;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 메시지 영역 */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            background: #fafbfc;
+            min-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            display: flex;
+            gap: 12px;
+        }
+
+        .message.user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7c3aed, #6366f1, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            border: 2px solid white;
+            position: relative;
+        }
+
+        .bot-avatar::after {
+            content: '🤖';
+            font-size: 18px;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .message.bot .message-content {
+            background: #f3f4f6;
+            color: #333;
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 2px 12px rgba(124, 58, 237, 0.2);
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        /* 제안 버튼 */
+        .suggestion-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .suggestion-btn {
+            background: white;
+            border: 2px solid #7c3aed;
+            color: #7c3aed;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(124, 58, 237, 0.1);
+        }
+
+        .suggestion-btn:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        /* 입력 영역 */
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 15px;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-area button {
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .input-area button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+        }
+
+        .input-area button:active {
+            transform: translateY(0);
+        }
+
+        /* 액션 버튼 - 일렬 배치, 세련된 디자인 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 140px;
+            max-width: 160px;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn h3 {
+            font-size: 13px;
+            margin-bottom: 3px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .action-btn p {
+            font-size: 10px;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .action-btn.faq {
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .action-btn.image {
+            background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+        }
+
+        .action-btn.link {
+            background: white;
+            color: #7c3aed;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-btn.call {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 타이핑 인디케이터 */
+        .typing-indicator {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-radius: 16px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <!-- 좌측 사이드바 - 사용 팁 -->
+        <div class="sidebar">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path
+                        d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                </svg>
+                챗봇 사용 팁
+            </h2>
+
+            <div class="tip-item">
+                <h3>1. 자주 묻는 질문 활용</h3>
+                <p>아래 FAQ 버튼을 클릭하면 카테고리별로 정리된 질문과 답변을 확인할 수 있습니다.</p>
+            </div>
+
+            <div class="tip-item">
+                <h3>2. 자유롭게 질문하기</h3>
+                <p>채팅창에 궁금한 내용을 직접 입력하세요. AI가 답변을 찾아드립니다.</p>
+            </div>
+
+            <div class="tip-item">
+                <h3>3. 추천 질문 사용</h3>
+                <p>답변 아래 나타나는 추천 질문을 클릭하면 관련 정보를 더 쉽게 찾을 수 있습니다.</p>
+            </div>
+
+            <div class="tip-item">
+                <h3>4. 직접 상담</h3>
+                <p>복잡한 문의는 '직접 상담' 버튼으로 전문가와 연결하세요.</p>
+            </div>
+
+            <!-- 신뢰 사이트 바로가기 -->
+            <h2 style="margin-top: 30px; margin-bottom: 15px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                신뢰 사이트
+            </h2>
+
+            <a href="https://rt.molit.go.kr/" target="_blank" class="site-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <line x1="18" y1="20" x2="18" y2="10" />
+                    <line x1="12" y1="20" x2="12" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                국토부 실거래가
+            </a>
+            <a href="https://www.wetax.go.kr/" target="_blank" class="site-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                </svg>
+                위택스
+            </a>
+            <a href="https://www.hometax.go.kr/" target="_blank" class="site-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                홈택스
+            </a>
+            <a href="https://www.fsc.go.kr/" target="_blank" class="site-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                금융위원회
+            </a>
+            <a href="https://new.land.naver.com/" target="_blank" class="site-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                네이버 부동산
+            </a>
+        </div>
+
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 헤더 -->
+            <div class="header">
+                <h1>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#gradient1)"
+                        stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 10px;">
+                        <defs>
+                            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    창원 유니시티 AI 상담
+                </h1>
+                <button class="admin-btn" onclick="openAdminModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
+                    </svg>
+                    관리자
+                </button>
+            </div>
+
+            <!-- 챗봇 컨테이너 -->
+            <div class="chatbot-container">
+                <div class="chatbot-card">
+                    <div class="chatbot-header">
+                        <h2>UNI_CITY 여여부동산</h2>
+                    </div>
+
+                    <div class="messages" id="messages"></div>
+
+                    <div class="input-area">
+                        <input type="text" id="userInput" placeholder="궁금하신 점을 입력하세요..."
+                            onkeypress="handleKeyPress(event)">
+                        <button onclick="sendMessage()">전송</button>
+                    </div>
+                </div>
+
+                <!-- 액션 버튼 (일렬 배치) -->
+                <div class="action-buttons">
+                    <button class="action-btn faq" onclick="showFAQ()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <h3>자주 묻는 질문</h3>
+                        <p>FAQ 바로가기</p>
+                    </button>
+                    <button class="action-btn image" onclick="openImageApp()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <h3>이미지 비교</h3>
+                        <p>평면도 비교 체험</p>
+                    </button>
+                    <button class="action-btn link" onclick="openTrustedSite()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                        <h3>신뢰 사이트</h3>
+                        <p>네이버 부동산</p>
+                    </button>
+                    <button class="action-btn call" onclick="callAgent()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <h3>직접 상담</h3>
+                        <p>010-5016-3331</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 모달 -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"
+                    style="display: inline-block; vertical-align: middle; margin-right: 10px;">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
+                </svg>
+                관리자 설정
+            </h2>
+
+            <div id="loginSection">
+                <div class="form-group">
+                    <label>비밀번호</label>
+                    <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력">
+                </div>
+                <button class="btn btn-primary" onclick="adminLogin()">로그인</button>
+                <button class="btn btn-secondary" onclick="closeAdminModal()">취소</button>
+            </div>
+
+            <div id="settingsSection" class="hidden">
+                <div class="form-group">
+                    <label>Gemini API Key (무료)</label>
+                    <input type="password" id="apiKey" placeholder="Google AI Studio에서 발급">
+                    <a href="https://aistudio.google.com/apikey" target="_blank"
+                        style="font-size: 13px; color: #667eea;">API 키 발급받기</a>
+                </div>
+
+                <div class="form-group">
+                    <label>Google Sheets ID</label>
+                    <input type="text" id="sheetId" placeholder="스프레드시트 ID 입력">
+                </div>
+
+                <hr style="margin: 25px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <div class="form-group">
+                    <label>📝 지식 데이터베이스 편집 (마크다운)</label>
+                    <small style="color: #666; font-size: 12px; display: block; margin-bottom: 8px;">
+                        ## 카테고리명 → ### 질문 → 답변 → [추천: 질문1, 질문2] 형식으로 작성
+                    </small>
+                    <textarea id="knowledgeEditor" rows="15"
+                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: monospace; font-size: 13px;"></textarea>
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary" onclick="saveKnowledge()">지식 저장</button>
+                        <button class="btn btn-secondary" onclick="exportKnowledge()">내보내기</button>
+                        <button class="btn btn-secondary" onclick="loadDefaultKnowledge()">기본값 복원</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 15px;">모든 설정 저장</button>
+                <button class="btn btn-secondary" onclick="logout()">로그아웃</button>
+                <button class="btn btn-secondary" onclick="closeAdminModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 지식 데이터베이스 (동일)
+        const APP_VERSION = '2026.01.16.v20'; // 버전 업그레이드 시 이 값을 변경하여 강제 업데이트 유도
+
+        const INITIAL_KNOWLEDGE = {
+            factors: {
+                title: "시세 영향을 미치는 요인",
+                questions: [
+                    {
+                        q: "창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?",
+                        a: `2025년 창원 아파트 입주 예정 물량은 11개 단지 8,185세대였지만, 2026년에는 3개 단지 474세대로 약 58% 감소한다.
+
+공급이 급감하면서 전세 물량이 부족해지고, 전세가격과 매매가격 모두 상승 압력이 커지는 구조다. 과거에도 입주 물량이 전년 대비 55% 감소했던 2021년에 아파트 매매가가 연 12.37%, 전세가가 10.39% 오른 사례가 있다.
+
+실무 포인트
+2026~2027년은 신축·준신축(유니시티 등) 중심으로 ‘공급 절벽에 따른 탄탄한 수요’ 구간이라, 매수자 입장에서는 입주가 거의 없는 연도에 기축을 선점하는 전략이 유리하다.`,
+                        followUp: ["창원 인구변화는 2026년 1월 기준 어떻게 보고 있나요?", "기준금리와 은행 대출금리는 2026년 1월 현재 어느 수준인가요?"]
+                    },
+                    {
+                        q: "창원 인구변화는 2026년 1월 기준 어떻게 보고 있나요?",
+                        a: `2010년 통합 당시 창원시 인구는 약 108만 명이었으나, 2024년 말에는 99만 9,858명 수준으로 줄어들어 100만 명이 깨졌다.
+
+나무위키 집계에 따르면 2015년 107만, 2020년 103만, 2025년 8월 99만 3천 명 수준으로 완만한 감소 추세이며, 구 마산 지역 인구 감소폭이 더 크고 구 창원·성산 쪽은 상대적으로 완만하다.
+
+실무 포인트
+전체 인구는 줄지만, 산업단지 인접·학군 우수·생활 인프라 양호 지역(성산구, 중동) 쪽으로 수요가 재배치되는 형태라, “도시 전체 감소=집값 폭락”으로 단순 해석하기보다는 구별·동별 인구와 일자리를 함께 봐야 한다.`,
+                        followUp: ["창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?", "국내 부동산 초양극화 상황에서 창원지역에서의 최선의 선택은 무엇인가요?"]
+                    },
+                    {
+                        q: "기준금리와 은행 대출금리는 2026년 1월 현재 어느 수준인가요?",
+                        a: `기준금리는 2025년 하반기 이후 큰 변동은 없지만, 국고채·MBS 금리 상승으로 주택담보대출 시장 금리는 다시 올라가는 흐름이다.
+
+5대 시중은행 혼합형(고정) 주담대 금리 밴드는 2026년 1월 기준 연 3.94%~6.24% 수준으로, 6%대 상단이 사실상 고착화된 상태다.
+
+실무 포인트
+보금자리론은 2026년 1월부터 0.25%p 인상되어 비우대 기준 약 3.9~4.2%, 우대금리 적용 시 2.9~3.2% 수준이며, 실수요자는 정책모기지(보금자리/디딤돌 등) 우선 검토 후, 모자라는 부분을 시중은행 혼합형으로 메우는 구조가 유리하다.`,
+                        followUp: ["신생아대출(신생아 특례 디딤돌)은 2026년 기준 조건이 어떻게 되나요?", "기금대출(디딤돌·버팀목 등)에 해당되지 않는 경우, 최선의 대출 팁은 무엇인가요?"]
+                    },
+                    {
+                        q: "창원은 현재 비규제지역인데, 어느 정도 상승이 계속되면 규제가 들어올 수 있나요?",
+                        a: `창원시 현재 대부분 비규제지만, 일부 지역은 조정대상지역 또는 규제 논의 이력이 있으며, 입주 감소+매매가 급등이 겹치면 조정대상지역·투기과열지구 지정 가능성이 생긴다.
+
+과거 다른 지방 도시에서도 비규제 상태에서 단기간 두자리수 상승률이 나오자, 거래량 증가·갭투자 비율 상승·미분양 급감 등이 확인된 후 규제가 뒤따른 사례가 있다.
+
+실무 포인트
+창원에서 연간 상승률이 한 자릿수 중후반(예: 7~10%) 이상으로 2~3년 반복되고, 거래량·전세가율이 함께 뛴다면 규제 가능성을 열어두고 LTV·DTI가 강화되기 전 선제적으로 대출·매수 전략을 잡는 것이 좋다.`,
+                        followUp: ["창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?", "국내 부동산 심리는 2026년 1월 현재 어떤 단계이며, 매수·매도 심리는 어떻게 바뀌고 있나요?"]
+                    },
+                    {
+                        q: "인플레이션은 2026년 1월 어느 정도이며, 앞으로 전망은 어떤가요?",
+                        a: `한국 연간 인플레이션율은 2025년 12월 기준 2.3%로, 전달 2.4%에서 소폭 내려왔고 9월 이후 최저 수준이다.
+
+글로벌 거시 모델과 전망에 따르면, 인플레이션율은 2026년 약 1.9%, 2027년 약 2.0% 수준으로 중앙은행 목표치 근처에서 안정될 것으로 예측된다.
+
+실무 포인트
+물가가 2% 안팎에서 안정되면 급격한 금리 인상 가능성은 낮아지지만, 실질금리 관점에서는 부동산 같은 실물자산이 여전히 인플레이션 헤지 수단이 되므로 장기보유 전제 실수요자에게는 우호적인 환경이다.`,
+                        followUp: ["2026년 1월 원‧달러 환율 수준은 어느 정도인가요?", "스테이블코인 발행이 경제·국제통화에 미치는 영향은?"]
+                    },
+                    {
+                        q: "2026년 1월 원‧달러 환율 수준은 어느 정도인가요?",
+                        a: `2026년 1월 1일 기준으로 1달러=약 1,444원 수준을 기록했고, 같은 날 종가 기준으로는 약 1,470원 안팎에서 움직였다.
+
+원화 약세(달러 강세) 국면이 이어지면 수입 건축자재·에너지 가격이 높아져 재건축·신축 단지의 공사비 부담이 커지는 요인이 된다.
+
+실무 포인트
+환율이 높은 구간에서는 **기존 기축아파트(이미 지어진 집)**의 상대적 매력이 올라가므로, 재건축 분담금이 크게 늘어나는 단지보다 준신축·기축(유니시티 등)을 우선 검토하는 전략이 합리적이다.`,
+                        followUp: ["인플레이션은 2026년 1월 어느 정도이며, 앞으로 전망은 어떤가요?", "창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?"]
+                    },
+                    {
+                        q: "스테이블코인 발행이 경제·국제통화에 미치는 영향, 특히 통화량 증가와 같은 효과가 있나요?",
+                        a: `미국에서는 스테이블코인을 제도권 내로 편입하는 법안(예: 발행 자산을 미국 국채·현금 등에 예치하도록 하는 방식)이 논의되고 있다.
+
+스테이블코인이 미국 국채와 연계되면 달러 수요가 늘어 달러화의 기축통화 지위가 더 강화될 수 있지만, 동시에 디지털 형태의 달러 비슷한 자산이 전 세계로 퍼지며 실질적인 유동성 확장(통화량 증가와 유사한 효과)으로 작용할 수 있다는 분석이 있다.
+
+실무 포인트
+장기적으로 달러 유동성이 커지면 글로벌 자산 가격(주식·부동산)에 완만한 상승 압력을 줄 수 있고, 원화 약세가 반복될 경우 국내 부동산은 “달러 대비 방어 자산” 역할을 할 수 있어, 지방 핵심도시(창원 같은 산업도시) 부동산도 일정 부분 수혜를 볼 여지가 있다.`,
+                        followUp: ["2026년 1월 원‧달러 환율 수준은 어느 정도인가요?", "인플레이션은 2026년 1월 어느 정도이며, 앞으로 전망은 어떤가요?"]
+                    },
+                    {
+                        q: "국내 부동산 심리는 2026년 1월 현재 어떤 단계이며, 매수·매도 심리는 어떻게 바뀌고 있나요?",
+                        a: `각종 심리지표와 기사들을 보면, 2023년까지의 하락과 거래 절벽 이후 2024~2025년에 바닥 확인·약한 반등이 있었고, 2025년 말~2026년 초에는 “완전한 낙관은 아니지만, 더 떨어지진 않을 것 같다”는 의구심/초기 회복 단계라는 평가가 많다.
+
+특히 창원 내에서도 일부 지역은 50% 이상 급등한 단지가 있는 반면, 다른 단지는 여전히 약세인 극단적 양극화가 나타나 “살 만한 곳 위주로만 오른다”는 인식이 강해졌다.
+
+실무 포인트
+매수 심리는 “좋은 입지·준신축은 지금이라도 잡자” 쪽으로 옮겨가고, 매도 심리는 “조금 더 오를 때까지 버텨보자”로 바뀌는 구간이라, 실수요자는 감정에 끌리기보다 구체적인 지표(실거래가·입주물량)를 보고 타이밍을 잡는 게 중요하다.`,
+                        followUp: ["국내 부동산 초양극화 상황에서 창원지역에서의 최선의 선택은 무엇인가요?", "상승기·보합·관망·하락기별로 남들보다 빠른 판단을 하려면?"]
+                    },
+                    {
+                        q: "국내 부동산 초양극화 상황에서 창원지역에서의 최선의 선택은 무엇인가요?",
+                        a: `2026년 전국적으로 “서울/수도권 핵심 vs. 지방 비핵심” 격차가 심해지는 가운데, 지방 핵심 산업도시·행정도시·관광도시는 다시 재평가되는 흐름이 나타난다.
+
+창원은 인구는 줄지만, 제조업 기반·산업단지 일자리·입주 절벽이라는 삼박자로 인해 도시 전체보다는 ‘구·동·단지별 양극화’가 더 심해지는 구조다.
+
+실무 포인트 (전략 예시)
+초양극화 국면에서 창원에서의 최선의 선택은
+공급이 거의 없는 시기(2026~27년)에
+산업단지 접근성·학군·생활 인프라가 좋고
+**이미 상품성이 검증된 준신축·기축(유니시티 등)**를
+실거주+중장기 보유 전제로 확보하는 전략이다.`,
+                        followUp: ["창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?", "유니시티의 평형 구성과 추천 평형은 어떻게 되나요?"]
+                    },
+                    {
+                        q: "유니시티의 평형 구성과 추천 평형은 어떻게 되나요?",
+                        a: `유니시티는 실속형부터 대형까지 다양한 평형대로 구성되어 있습니다.
+
+- **25평**: 신혼부부나 1~2인 가구에 가장 인기 있는 평형
+- **30평**: (인기) 공간 활용도가 높고 가성비가 좋아 최근 문의가 급증하는 평형
+- **35평**: 가장 많은 세대수와 두터운 수요층을 가진 유니시티 메인 평형
+- **41평/47평**: 넓은 수납공간과 여유로운 생활을 원하는 가족 단위에 추천
+- **56평**: 희소성이 높은 대형 평형으로 프리미엄 주거 환경 제공
+
+실무 포인트
+실거주와 투자 가치를 동시에 고려하신다면 수요가 가장 탄탄한 **30평과 35평**을 우선 추천드립니다.`,
+                        followUp: ["창원지역 수요와 공급은 2026년 1월 기준 어떤 상황인가요?", "매물 검색하기"]
+                    }
+                ]
+            },
+            loan: {
+                title: "대출 가이드",
+                questions: [
+                    {
+                        q: "신생아대출(신생아 특례 디딤돌)은 2026년 기준 조건이 어떻게 되나요?",
+                        a: `2026년 신생아 특례대출은 부부 합산 소득 2억 원 이하로 확정되었고, 외벌이 기준은 1.3억 원, 맞벌이 합산 2억 원까지 허용된다.
+
+대출 대상은 신청일 기준 2년 이내 출산 또는 입양한 가구이며, 무주택 또는 일정 요건의 1주택 대환 용도로 이용 가능하고, 금리는 연 1.8~4.5% 정도의 고정금리, 한도는 최대 약 4억 원 수준이다.
+
+실무 포인트
+신생아 특례는 일반 시중은행 대출보다 금리가 1~2%p 낮을 수 있어, 자격이 된다면 가장 먼저 검토해야 하는 정책 대출이다.`,
+                        followUp: ["신혼부부대출(전세·구입) 조건은 2026년에 어떻게 되나요?", "생애최초 주택구입에 따른 취득세·대출 혜택 조건은?"]
+                    },
+                    {
+                        q: "신혼부부대출(전세·구입) 조건은 2026년에 어떻게 되나요?",
+                        a: `신혼부부 전용 버팀목 전세대출은 부부 합산 소득 7,500만원 이하, 전용 85㎡ 이하, 전세보증금 수도권 5억·비수도권 3억 이하 주택에 대해 보증금의 80% 이내, 비수도권 최대 2억까지 지원하며, 금리는 1.9~3.3% 수준이다.
+
+신혼부부 디딤돌(구입)은 소득 8,500만원 이하 신혼부부가 대상이며, 주택 가격 6억 이하(비수도권 기준) 주택의 최대 70%(생애최초은 80%)까지, 한도는 최대 3.2억, 금리는 약 2.15~3.0% 정도다.
+
+실무 포인트
+전세 상황에서는 버팀목으로 월세 부담을 줄이고, 구입 타이밍에는 디딤돌·신생아 특례 등을 조합해 이자 부담을 최소화하는 식으로 설계하는 것이 좋다.`,
+                        followUp: ["신생아대출(신생아 특례 디딤돌)은 2026년 기준 조건이 어떻게 되나요?", "생애최초 주택구입에 따른 취득세·대출 혜택 조건은?"]
+                    },
+                    {
+                        q: "생애최초 주택구입에 따른 취득세·대출 혜택 조건은?",
+                        a: `생애 최초 주택 취득세 감면 제도는 2028년 말까지 연장되었으며, 실거래가 12억 원 이하 주택을 **처음으로 구입하는 경우 취득세 100% 면제(최대 200만 원 한도)**가 적용된다.
+
+소득과 관계없이 무주택자가 첫 주택을 매수하는 경우 적용 가능하며, 취득세 감면 외에도 일부 정책대출에서 LTV 상향(80%) 등 우대가 붙을 수.
+
+실무 포인트
+생애최초라면 취득세 거의 안 낸다고 보는 수준이어서, 계약 전 “생애최초 여부”만 정확히 확인해도 수백만 원 절세 효과가 있다.`,
+                        followUp: ["신생아대출(신생아 특례 디딤돌)은 2026년 기준 조건이 어떻게 되나요?", "신혼부부대출(전세·구입) 조건은 2026년에 어떻게 되나요?"]
+                    },
+                    {
+                        q: "기금대출(디딤돌·버팀목 등)에 해당되지 않는 경우, 최선의 대출 팁은 무엇인가요?",
+                        a: `소득·주택가격이 높아 기금대출이 안 되는 경우, 장기 고정금리 위주의 보금자리론·특례보금자리론+시중은행 혼합형(고정+변동) 조합이 대표적인 대안이다.
+
+2026년 1월 보금자리론 금리는 0.25%p 인상되어 기본 3.9~4.2% 수준이지만, 신혼·다자녀 등 우대금리를 적용하면 2.9~3.2%까지 내려갈 수.
+
+실무 포인트
+기금이 안 되면
+보금자리/특례보금자리로 60~70% 수준을 고정금리로 확보하고,
+나머지는 시중은행 혼합형이나 전세대출+갭 구조 등으로 보완하는 방식이 보편적이다.
+금리 상단이 6%대까지 올라 있는 상황이라, 변동비중을 너무 공격적으로 가져가기보다는 고정비중을 일정 수준 두는 것이 안전하다.`,
+                        followUp: ["기준금리와 은행 대출금리는 2026년 1월 현재 어느 수준인가요?", "신생아대출(신생아 특례 디딤돌)은 2026년 기준 조건이 어떻게 되나요?"]
+                    }
+                ]
+            },
+            subscription: {
+                title: "청약 정보",
+                questions: [
+                    {
+                        q: "신혼부부·신생아·장애인 등 특별공급 종류와 기본 조건은?",
+                        a: `신혼부부 특별공급: 혼인 기간 7년 이내, 소득 기준(대략 도시근로자 평균소득 120~160% 이내) 충족, 무주택 등 요건을 만족하면 분양 물량의 일정 비율을 우선 공급받는다.
+
+신생아 특별공급: 최근 2년 내 출산 가구, 일정 소득·무주택 기준 충족 시 별도 배정 물량이 주어지는 형태로 도입·확대되고 있다.
+
+장애인 특별공급: 장애인 가구(보통 등록장애인 포함 가구주)를 대상으로 일정 물량을 배정하며, 공급 비율과 세부 요건은 지구·공급기관별로 공고문에서 정한다.
+
+실무 포인트
+각 특공은 분양 공고마다 비율·소득 기준·우선순위가 다르므로, 실제 청약 전에는 마이홈·LH·지자체 공고문을 반드시 확인해야 한다.`,
+                        followUp: ["특공 자격이 되지만, 기축아파트를 먼저 매수했다가 나중에 무주택으로 돌아가면 특공을 다시 쓸 수 있나요?", "기축아파트를 매수한 후, 일시적 1가구 2주택으로 갈아타기를 할 때 주의할 점은?"]
+                    },
+                    {
+                        q: "특공 자격이 되지만, 기축아파트를 먼저 매수했다가 나중에 무주택으로 돌아가면 특공을 다시 쓸 수 있나요?",
+                        a: `일반적으로 특별공급 자격에서 말하는 “무주택”은 청약 신청일 기준의 주택 보유 상태로 판단한다.
+
+따라서 한 번 특별공급 자격이 되었지만, 중간에 기축아파트(예: 유니시티)를 매수했다가 그 주택을 처분해 다시 무주택 상태가 되면, 그 시점 이후 새 분양에서 특별공급 자격을 다시 충족할 수 있습니다. 다만 특별공급 “횟수 제한”이 있는 제도는 별도 규정을 따라야 한다.
+
+실무 포인트
+“기축 먼저 사고→나중에 팔고→신축 특공 다시 쓰기” 전략은 매도 시점의 무주택 상태만 정확히 맞추면 가능하므로, 등기이전일·잔금일·청약일 등을 꼼꼼히 맞추는 것이 중요하다.`,
+                        followUp: ["신혼부부·신생아·장애인 등 특별공급 종류와 기본 조건은?", "기축아파트를 매수한 후, 일시적 1가구 2주택으로 갈아타기를 할 때 주의할 점은?"]
+                    },
+                    {
+                        q: "기축아파트를 매수한 후, 일시적 1가구 2주택으로 갈아타기를 할 때 주의할 점은?",
+                        a: `소득세법상 일시적 1세대 2주택 비과세는 통상
+새 집을 마련한 뒤 일정 기간 내(예: 3년 이내, 조정·비조정 여부에 따라 다름)에 기존 집을 팔고
+보유·거주 기간 요건(2년 보유·거주 등)을 충족하면,
+기존 집 양도에 대해 비과세 혜택을 준다.
+
+기축 매수→신축 입주 갈아타기 전략에서 가장 많은 실수는 **기간 계산 실수(3년 초과, 전입 지연)**와 조정대상지역 여부 착오다.
+
+실무 포인트
+“언제까지 팔아야 비과세가 유지되는지”, “조정지역인지 비조정인지”, “2년 거주 요건이 필요한지”는 시기와 지역마다 조금씩 바뀔 수 있으므로, 국세청·정부24·세무사 상담으로 구체적인 기한을 확인한 뒤 매수/매도 스케줄을 짜는 것이 안전하다.`,
+                        followUp: ["양도소득세(1주택·2주택·3주택)에 대해 자주 묻는 핵심 포인트는?", "특공 자격이 되지만, 기축아파트를 먼저 매수했다가 나중에 무주택으로 돌아가면 특공을 다시 쓸 수 있나요?"]
+                    },
+                    {
+                        q: "재건축 아파트는 건축비 상승으로 어떤 사업 차질 위험이 있고, 무엇을 조심해야 하나요?",
+                        a: `최근 몇 년 사이 글로벌 원자재·인건비 상승과 환율 영향으로, 국내 아파트 건축비(표준건축비)가 상당 폭 인상되었다.
+
+건축비 급등은 재건축 단지에서 조합원 분담금 증가, 일반분양가 인상, 사업성 악화, 사업 지연으로 이어질 수 있고, 일부 단지는 분담금 부담을 못 버티고 조합원 이탈·사업 보류 사례도 나온다.
+
+실무 포인트
+재건축 투자자는
+조합이 승인한 최신 공사비·분담금 계획
+시행·시공사의 재무건전성
+일반분양가 상한·분양경기
+를 반드시 확인해야 하며, “단순 과거 예상 분담금”만 보고 들어가면 나중에 수억 원 추가 분담 위험에 노출될 수 있다.`,
+                        followUp: ["2026년 1월 원‧달러 환율 수준은 어느 정도인가요?", "인플레이션은 2026년 1월 어느 정도이며, 앞으로 전망은 어떤가요?"]
+                    }
+                ]
+            },
+            tax: {
+                title: "세금 가이드",
+                questions: [
+                    {
+                        q: "취득세 관련해서 실무적으로 알아두면 좋은 팁은?",
+                        a: `주택 취득세율은 실거래가·주택 수(1주택/2주택/3주택 이상)·조정대상지역 여부에 따라 1~12%까지 크게 달라진다.
+
+생애최초 취득세 감면을 활용하면 12억 이하 첫 주택은 취득세가 최대 200만 원까지 면제되므로, 첫 집일 때와 두 번째 집일 때의 취득세 차이를 꼭 계산하고 움직여야 한다.
+
+실무 포인트
+계약 전 “본인 세대 주택 수”, “생애최초 여부”, “조정/비조정 여부”만 체크해도 수백~수천만 원 차이가 날 수 있으니, 계약서 쓰기 전에 취득세 계산기를 한 번 돌려보는 습관이 중요하다.`,
+                        followUp: ["생애최초 주택구입에 따른 취득세·대출 혜택 조건은?", "양도소득세(1주택·2주택·3주택)에 대해 자주 묻는 핵심 포인트는?"]
+                    },
+                    {
+                        q: "양도소득세(1주택·2주택·3주택)에 대해 자주 묻는 핵심 포인트는?",
+                        a: `1주택: 1세대 1주택이면서 2년 이상 보유(조정지역은 2년 이상 거주까지 요구되는 경우가 많음)하고, 양도가액이 일정 금액(현재 12억 원) 이하이면 비과세가 가능하다.
+
+2주택 이상: 기본세율(6~45%)에 추가 중과세율이 붙을 수 있으며, 다만 중과 유예 조치가 일정 기간 적용된 상태라 시점에 따라 세부 내용이 달라진다.
+
+실무 포인트
+갈아타기를 고민하는 고객에게는 “언제 팔면 비과세/중과 회피가 되는지”를 먼저 달력에 표시해 주는 것이 실질적인 도움이 된다.`,
+                        followUp: ["기축아파트를 매수한 후, 일시적 1가구 2주택으로 갈아타기를 할 때 주의할 점은?", "보유세(재산세·종합부동산세)에 대해 자주 나오는 질문은?"]
+                    },
+                    {
+                        q: "보유세(재산세·종합부동산세)에 대해 자주 나오는 질문은?",
+                        a: `재산세는 공시가격 구간에 따라 대략 0.1~0.4% 수준의 세율이 적용되며, 종부세는 일정 기준금액(1주택자 기준 12억 합산 등)을 넘는 고가 다주택자 위주로 부과된다.
+
+1주택 실수요자의 경우, 공시가격이 아주 높지 않다면 재산세 위주로 부담이 형성되고 종부세는 거의 없거나 소액인 경우가 많다.
+
+실무 포인트
+고객 상담 시에는 “보유세가 무조건 폭탄으로 나오는 것은 아니고, 1주택 실거주자는 재산세 수준”이라는 점을 수치 예시와 함께 설명해 주면 불안감을 줄여줄 수 있다.`,
+                        followUp: ["취득세 관련해서 실무적으로 알아두면 좋은 팁은?", "양도소득세(1주택·2주택·3주택)에 대해 자주 묻는 핵심 포인트는?"]
+                    },
+                    {
+                        q: "세금 관련 절세 팁은 어떤 것들이 있나요? (요점 위주)",
+                        a: `자주 언급되는 절세 포인트를 요약하면 다음과 같다.
+
+생애최초 취득세 감면 활용(최대 200만 원)
+1세대 1주택 비과세 요건(보유·거주 기간) 정확히 맞추기
+일시적 1가구 2주택 비과세 기간(예: 3년 이내 매도) 준수
+부부 공동명의 vs 단독명의 비교 후 종부세·건보료 영향 고려
+장기보유특별공제(보유·거주 연수에 따라 양도차익 공제) 최대한 활용
+
+실무 포인트
+중개사가 전부 계산해 줄 필요는 없지만, “어느 시점에 세무사를 꼭 찾아가야 하는지” 기준을 안내해 주는 것만으로도 큰 가치가 있다.`,
+                        followUp: ["취득세 관련해서 실무적으로 알아두면 좋은 팁은?", "양도소득세(1주택·2주택·3주택)에 대해 자주 묻는 핵심 포인트는?"]
+                    }
+                ]
+            },
+            action: {
+                title: "거래 행동강령",
+                questions: [
+                    {
+                        q: "상승기·보합·관망·하락기별로 남들보다 빠른 판단을 하려면 어떤 마인드가 필요할까요?",
+                        a: `상승기: 공급 감소·거래량 증가·실거래 신고가 경신이 동시에 보일 때는 “망설이다가 가격이 한 번에 뛰는 구간”이므로, 객관적 데이터를 기준으로 빠르게 결단하는 마인드가 필요하다.
+
+보합기/관망기: 가격 움직임이 크지 않을 때는 “준비기”로 보고, 대출 한도·세금·청약 자격 정리, 목표 단지 리스트업 등에 집중하는 게 유리하다.
+하락기: 단기 가격 하락에 감정적으로 휘둘리지 않고, 입주물량·인구·일자리 등 펀더멘털이 괜찮은 곳의 저가 매수 기회로 보는 마인드가 필요하다.
+
+실무 포인트
+고객 상담 시 “지금은 4단계 중 어디쯤인지”를 간단한 체크리스트로 보여주고, 각 단계에서 할 행동(매수/관망/매도/준비)을 정해두면, 감정이 아닌 계획대로 움직일 수 있다.`,
+                        followUp: ["같은 시기에 거래를 희망하는 사람들은 경쟁자인데, 남과 다른 지혜로운 행동은 무엇일까요?", "국내 부동산 심리는 2026년 1월 현재 어떤 단계이며, 매수·매도 심리는 어떻게 바뀌고 있나요?"]
+                    },
+                    {
+                        q: "같은 시기에 거래를 희망하는 사람들은 경쟁자인데, 남과 다른 지혜로운 행동은 무엇일까요?",
+                        a: `다른 사람들은 보통 뉴스·유튜브 감정적인 분위기에 따라 움직이지만, 지혜로운 행동은
+실거래가 데이터,
+입주 예정 물량,
+대출·세금 조건
+을 먼저 보고 판단하는 것이다.
+
+예를 들어, 모두가 “비싸다”고 말할 때 입주절벽+산업단지 호재+실거래 저가 매물이 동시에 겹치는 단지를 조용히 선점하는 방식이다.
+
+실무 포인트
+중개사가 입장에서는 고객에게 “남들 다 오를 때 따라 사는 게 아니라, 데이터 상으로 유리할 때, 미리 준비된 사람만 매수하는 것이 진짜 현명한 행동”이라는 메시지를 꾸준히 교육해 두면, 나중에 실제 거래 상담이 훨씬 수월해진다.`,
+                        followUp: ["상승기·보합·관망·하락기별로 남들보다 빠른 판단을 하려면 어떤 마인드가 필요할까요?", "국내 부동산 초양극화 상황에서 창원지역에서의 최선의 선택은 무엇인가요?"]
+                    }
+                ]
+            }
+        };
+
+        const knowledgeBase = JSON.parse(JSON.stringify(INITIAL_KNOWLEDGE));
+
+        let isAdminLoggedIn = false;
+        let currentSearch = {
+            step: 0,
+            pyung: '',
+            complexes: [],
+            type: '',
+            tradeType: ''
+        };
+
+        const pyungOptions = {
+            "25평": { typeRequired: false, complexes: ["1단지", "2단지", "3단지", "4단지"] },
+            "30평": { typeRequired: false, complexes: ["1단지", "2단지", "3단지", "4단지"] },
+            "35평": { typeRequired: true, types: ["35A", "35B"] },
+            "41평": { typeRequired: false, complexes: ["1단지", "2단지", "3단지", "4단지"] },
+            "47평(48평)": { typeRequired: false, complexes: ["1단지", "2단지", "3단지", "4단지"] },
+            "56평": { typeRequired: true, types: ["56A", "56B"] }
+        };
+
+        function init() {
+            loadSettings();
+            addBotMessage("안녕하세요 여여부동산 챗봇입니다\n질문을 선택해주세요", getInitialSuggestions());
+        }
+
+        function getInitialSuggestions() {
+            return ["자주 묻는 질문 보기", "매물 검색하기", "이미지 비교 체험하기"];
+        }
+
+        function addBotMessage(text, suggestions = []) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+
+            // 간단한 마크다운 처리 (굵게, 줄바꿈)
+            let formattedText = text
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            messageDiv.innerHTML = `
+                <div class="bot-avatar">AI</div>
+                <div>
+                    <div class="message-content">${formattedText}</div>
+                    ${suggestions.length > 0 ? `
+                        <div class="suggestion-buttons">
+                            ${suggestions.map(s => `<button class="suggestion-btn" onclick="handleSuggestion('${s.replace(/'/g, "\\'")}')">${s}</button>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesDiv = document.getElementById('messages');
+            const typing = document.createElement('div');
+            typing.className = 'message bot';
+            typing.id = 'typing';
+            typing.innerHTML = `
+                <div class="bot-avatar">AI</div>
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            messagesDiv.appendChild(typing);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addUserMessage(message);
+            input.value = '';
+            processUserMessage(message);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        async function handleSuggestion(text) {
+            addUserMessage(text);
+
+            // 매물 검색 흐름 처리
+            if (Object.keys(pyungOptions).includes(text)) {
+                startPropertySearch(text);
+                return;
+            }
+
+            if (currentSearch.step > 0) {
+                continuePropertySearch(text);
+                return;
+            }
+
+            processUserMessage(text);
+        }
+
+        function startPropertySearch(pyung) {
+            currentSearch = { step: 1, pyung: pyung, complexes: [], type: '', tradeType: '' };
+            const options = pyungOptions[pyung];
+
+            if (options.typeRequired) {
+                addBotMessage(`${pyung}을 선택하셨습니다. 타입을 선택해주세요.`, options.types);
+            } else {
+                // 단지 선택 단계로 바로 이동 (복수 선택 지원)
+                currentSearch.step = 2;
+                addBotMessage(`${pyung}을 선택하셨습니다. 보고 싶은 단지를 선택해주세요. (여러 개 선택 가능)`, ["전체 단지", "1단지", "2단지", "3단지", "4단지"]);
+            }
+        }
+
+        function continuePropertySearch(text) {
+            const options = ["1단지", "2단지", "3단지", "4단지"];
+
+            if (currentSearch.step === 1) {
+                // 타입 선택 완료 후 단지 선택으로 이동
+                currentSearch.type = text;
+                currentSearch.step = 2;
+                addBotMessage(`${text} 타입을 선택하셨습니다. 단지를 선택해주세요.`, ["전체 단지", ...options]);
+            } else if (currentSearch.step === 2) {
+                // 단지 선택 처리
+                if (text === "전체 단지") {
+                    currentSearch.complexes = []; // 비어있으면 전체 검색 매칭됨
+                    currentSearch.step = 3;
+                    addBotMessage("전체 단지의 매물을 찾습니다. 거래 종류를 선택해주세요.", ["매매", "전세", "월세"]);
+                } else if (text === "선택 완료") {
+                    currentSearch.step = 3;
+                    const complexText = currentSearch.complexes.join(", ");
+                    addBotMessage(`${complexText} 매물을 찾습니다. 거래 종류를 선택해주세요.`, ["매매", "전세", "월세"]);
+                } else {
+                    // 단지 개별 선택
+                    if (!currentSearch.complexes.includes(text)) {
+                        currentSearch.complexes.push(text);
+                    }
+
+                    const selectedText = currentSearch.complexes.join(", ");
+                    const remaining = options.filter(o => !currentSearch.complexes.includes(o));
+
+                    if (remaining.length === 0) {
+                        currentSearch.step = 3;
+                        addBotMessage(`모든 단지(**${selectedText}**)가 선택되었습니다. 거래 종류를 선택해주세요.`, ["매매", "전세", "월세"]);
+                    } else {
+                        addBotMessage(`현재 선택됨: **${selectedText}**\n\n단지를 더 선택하시거나 [선택 완료]를 눌러주세요.`, ["선택 완료", ...remaining]);
+                    }
+                }
+            } else if (currentSearch.step === 3) {
+                // 종류 선택 후 실행
+                currentSearch.tradeType = text;
+                currentSearch.step = 0;
+                executePropertySearch();
+            }
+        }
+
+        async function executePropertySearch() {
+            const { pyung, complex, type, tradeType } = currentSearch;
+            addBotMessage(`${pyung} ${complex || type || ""} ${tradeType} 매물을 찾는 중입니다... ✨`);
+
+            try {
+                const data = await fetchGoogleSheetData();
+                const filtered = data.filter(item => {
+                    const normalize = (val) => (val || "").toString().replace(/[\s\(\)\-\_\/평]/g, '').toUpperCase();
+
+                    // 1. 평형 매칭 (숫자 배열 교집합 확인)
+                    const searchPyungNums = pyung.match(/\d+/g) || [];
+                    const itemPyungNums = (item.pyungCol + " " + item.pyungTypeCol).match(/\d+/g) || [];
+                    let matchPyung = searchPyungNums.some(sn => itemPyungNums.includes(sn));
+
+                    const itemDesc = normalize(item.description);
+
+                    // 2. 타입 매칭 (A, B 등)
+                    let matchType = true;
+                    if (type) {
+                        const searchType = normalize(type);
+                        const searchTypeOnly = (type || "").replace(/[0-9평\s]/g, '').toUpperCase();
+                        const itemPyungType = normalize(item.pyungTypeCol);
+                        const itemType = normalize(item.type);
+
+                        matchType = (!itemPyungType && !itemType) ||
+                            itemPyungType.includes(searchType) ||
+                            (searchTypeOnly && itemType === searchTypeOnly) ||
+                            itemDesc.includes(searchType);
+                    }
+
+                    // 3. 종류 매칭 (매매, 전세, 월세)
+                    const itemTrade = normalize(item.tradeType);
+                    const searchTrade = normalize(tradeType);
+                    let matchTrade = (itemTrade && searchTrade) && (itemTrade.includes(searchTrade) || searchTrade.includes(itemTrade));
+
+                    if (!matchTrade && searchTrade === "매매") {
+                        matchTrade = itemTrade.includes("급매") || itemDesc.includes("급매");
+                    }
+
+                    // 4. 단지 매칭 (복수 단지 지원)
+                    let matchComplex = true;
+                    if (currentSearch.complexes.length > 0) {
+                        const sNums = currentSearch.complexes.map(c => c.replace(/[^0-9]/g, ''));
+                        const itemComplexStr = (item.complex || "").toUpperCase();
+                        const iNum = itemComplexStr.replace(/[^0-9]/g, '');
+
+                        // 시트에 정보가 없으면 포함, 있으면 선택된 단지 중 하나와 일치해야 함
+                        matchComplex = !item.complex || sNums.includes(iNum) || sNums.some(sn => itemComplexStr.includes(sn));
+                    }
+
+                    // 5. 면적 보조 매칭
+                    if (!matchPyung) {
+                        const supplyNum = parseFloat((item.supply || "").replace(/[^0-9.]/g, '')) || 0;
+                        if (supplyNum > 0) {
+                            if (pyung === "25평") matchPyung = (supplyNum >= 75 && supplyNum <= 90);
+                            else if (pyung === "30평") matchPyung = (supplyNum >= 95 && supplyNum <= 108);
+                            else if (pyung === "35평") matchPyung = (supplyNum >= 110 && supplyNum <= 125);
+                            else if (pyung === "41평") matchPyung = (supplyNum >= 130 && supplyNum <= 145);
+                            else if (pyung.includes("47") || pyung.includes("48")) matchPyung = (supplyNum >= 150 && supplyNum <= 168);
+                            else if (pyung === "56평") matchPyung = (supplyNum >= 180 && supplyNum <= 205);
+                        }
+                    }
+
+                    return matchPyung && matchType && matchComplex && matchTrade;
+                });
+
+                if (filtered.length > 0) {
+                    let response = `🏠 **[ ${pyung} ${complex || type || ""} ${tradeType} ]** 검색 결과\n`;
+                    response += `시트에서 총 **${filtered.length}개**의 매물을 찾았습니다.\n\n`;
+
+                    filtered.forEach((item, idx) => {
+                        const pyungTypeInfo = item.pyungTypeCol ? `[${item.pyungTypeCol}] ` : "";
+                        const complexInfo = item.complex ? `[${item.complex}] ` : "";
+                        response += `**${idx + 1}. ${pyungTypeInfo}${complexInfo}${item.dong} (${item.supply}m²/${item.exclusive}m²)**\n`;
+                        response += `└ 종류: **${item.tradeType}** | 층/방향: ${item.floor} / ${item.direction}\n`;
+                        response += `└ 💰 가격: **${item.price}**\n`;
+                        response += `└ 특징: ${item.description}\n\n`;
+                    });
+
+                    if (filtered.length > 30) {
+                        response += `💡 매물이 많아 전화 상담(010-5016-3331)을 이용하시면 더 상세한 정보를 얻으실 수 있습니다.`;
+                    }
+
+                    addBotMessage(response, ["다른 매물 찾기"]);
+                } else {
+                    addBotMessage(`죄송합니다. 현재 ${pyung} ${complex || type} ${tradeType} 매물이 없습니다.\n\n새로운 매물이 등록되면 바로 알려드릴까요?`, ["매물 알림 신청", "다른 매물 찾기"]);
+                }
+            } catch (error) {
+                console.error("Property Search Error:", error);
+                const errorDetail = error.message ? `(${error.message})` : "";
+                addBotMessage(`구글 시트 데이터를 불러오는 중 오류가 발생했습니다 ${errorDetail}.\n1. 시트 ID가 정확한지\n2. 시트가 '링크가 있는 모든 사용자에게 공개'되어 있는지 확인해주세요.`);
+            }
+        }
+
+        async function fetchGoogleSheetData() {
+            const sheetId = localStorage.getItem('sheet_id') || '1Ajn0VVRqQfpjEimzmW7yorf7ecL9RKpXWpsCNj2QhsE';
+            if (!sheetId) throw new Error("시트 ID가 설정되지 않았습니다.");
+
+            // 캐시 방지를 위해 타임스탬프 추가
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&t=${Date.now()}`;
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`시트 접근 실패 (상태코드: ${response.status})`);
+            }
+
+            const text = await response.text();
+            if (text.trim().startsWith("<!DOCTYPE html>")) {
+                throw new Error("비정상적인 응답 (시트가 공개되어 있지 않을 가능성이 높습니다)");
+            }
+
+            const parseCSV = (str) => {
+                const arr = [];
+                let quote = false;
+                let row = 0, col = 0;
+                for (let c = 0; c < str.length; c++) {
+                    let cc = str[c], nc = str[c + 1];
+                    arr[row] = arr[row] || [];
+                    arr[row][col] = arr[row][col] || "";
+                    if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
+                    if (cc == '"') { quote = !quote; continue; }
+                    if (cc == ',' && !quote) { ++col; continue; }
+                    if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+                    if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+                    if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+                    arr[row][col] += cc;
+                }
+                return arr;
+            };
+
+            let csvRows = parseCSV(text.trim());
+            // 의미 없는 빈 줄 제거
+            csvRows = csvRows.filter(row => row.some(cell => cell && cell.trim().length > 0));
+
+            if (csvRows.length < 2) return [];
+
+            const headers = csvRows[0].map(h => (h || "").trim());
+            const getIdx = (name) => {
+                const exact = headers.indexOf(name);
+                if (exact !== -1) return exact;
+                // 유연한 매칭 (단지명 -> 단지 포함 확인 등)
+                return headers.findIndex(h => h && (h.includes(name) || name.includes(h)));
+            };
+
+            const idx = {
+                complex: getIdx("단지명"),
+                dong: getIdx("동"),
+                tradeType: getIdx("종류"),
+                price: getIdx("가격"),
+                supply: getIdx("공급"),
+                exclusive: getIdx("전용"),
+                type: getIdx("타입"),
+                pyung: getIdx("평형"),
+                pyungType: getIdx("평형타입"),
+                floor: getIdx("층"),
+                direction: getIdx("방향"),
+                description: getIdx("특징")
+            };
+
+            return csvRows.slice(1).map(row => {
+                const getValue = (i) => (i >= 0 && row[i] ? row[i].trim() : "");
+                return {
+                    complex: getValue(idx.complex),
+                    dong: getValue(idx.dong),
+                    tradeType: getValue(idx.tradeType),
+                    price: getValue(idx.price),
+                    supply: getValue(idx.supply),
+                    exclusive: getValue(idx.exclusive),
+                    pyungCol: getValue(idx.pyung),
+                    pyungTypeCol: getValue(idx.pyungType),
+                    type: getValue(idx.type),
+                    floor: getValue(idx.floor),
+                    direction: getValue(idx.direction),
+                    description: getValue(idx.description)
+                };
+            });
+        }
+
+        async function processUserMessage(message) {
+            if (message === '관리자' || message === '관리자 페이지 열기') {
+                openAdminModal();
+                addBotMessage("관리자 인증이 필요합니다. 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            if (message.includes('이미지') || message.includes('비교')) {
+                openImageApp();
+                addBotMessage("이미지 비교 앱을 새 창으로 열었습니다. 평형별/타입별 차이를 한눈에 확인해보세요! ✨", ["다른 질문하기"]);
+                return;
+            }
+
+            // 평형 키워드 감지 시 매물 검색 시작
+            if (Object.keys(pyungOptions).some(p => message.includes(p))) {
+                const foundPyung = Object.keys(pyungOptions).find(p => message.includes(p));
+                startPropertySearch(foundPyung);
+                return;
+            }
+
+            showTyping();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            hideTyping();
+
+            if (message.includes('자주') || message.includes('FAQ')) {
+                showFAQCategories();
+                return;
+            }
+
+            if (message === '매물 검색하기' || message.includes('매물 찾기')) {
+                addBotMessage("문의하실 아파트의 평형을 선택해주세요.", Object.keys(pyungOptions));
+                return;
+            }
+
+            // 카테고리 제목 클릭 시 해당 카테고리 질문 출력
+            for (const category of Object.values(knowledgeBase)) {
+                if (message === category.title || message.includes(category.title)) {
+                    const questions = category.questions.map(q => q.q);
+                    addBotMessage(`${category.title}에 대해 궁금하신 내용을 선택해주세요.`, questions);
+                    return;
+                }
+            }
+
+            for (const category of Object.values(knowledgeBase)) {
+                for (const item of category.questions) {
+                    if (message.includes(item.q) || item.q.includes(message)) {
+                        addBotMessage(item.a, item.followUp);
+                        return;
+                    }
+                }
+            }
+
+            const apiKey = localStorage.getItem('gemini_api_key') || 'gen-lang-client-0102368272';
+            if (apiKey) {
+                try {
+                    const response = await queryGemini(message, apiKey);
+                    addBotMessage(response, ["다른 질문하기"]);
+                } catch {
+                    addBotMessage("죄송합니다. 답변을 찾지 못했습니다.\n\n직접 상담: 010-5016-3331", ["자주 묻는 질문 보기"]);
+                }
+            } else {
+                addBotMessage("해당 질문은 FAQ에 없습니다.\n\n직접 상담을 원하시면 아래 버튼을 클릭하세요.", ["자주 묻는 질문 보기"]);
+            }
+        }
+
+        async function queryGemini(question, apiKey) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: question }] }]
+                })
+            });
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        function showFAQ() {
+            addUserMessage("자주 묻는 질문 보기");
+            showFAQCategories();
+        }
+
+        function showFAQCategories() {
+            const categories = Object.keys(knowledgeBase).map(key => knowledgeBase[key].title);
+            addBotMessage("어떤 주제가 궁금하신가요?", categories);
+        }
+
+        function openImageCompare() {
+            // Updated Link: 2026-01-20
+            if (confirm('새로운 여여 갤러리로 이동합니다. (YeoYeo Gallery)')) {
+                window.open('https://yeoyeo-gallery-v2.vercel.app', '_blank');
+            }
+        }
+
+        function openImageApp() {
+            window.open('https://yeoyeo-gallery-v2.vercel.app', '_blank');
+        }
+
+        function openTrustedSite() {
+            window.open('https://new.land.naver.com/', '_blank');
+        }
+
+        function callAgent() {
+            window.location.href = 'tel:010-5016-3331';
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === '1006') {
+                isAdminLoggedIn = true;
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('settingsSection').classList.remove('hidden');
+                loadAdminSettings();
+            } else {
+                alert('비밀번호가 올바르지 않습니다.');
+            }
+        }
+
+        function logout() {
+            isAdminLoggedIn = false;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('settingsSection').classList.add('hidden');
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function loadAdminSettings() {
+            document.getElementById('apiKey').value = localStorage.getItem('gemini_api_key') || 'gen-lang-client-0102368272';
+            document.getElementById('sheetId').value = localStorage.getItem('sheet_id') || '1Ajn0VVRqQfpjEimzmW7yorf7ecL9RKpXWpsCNj2QhsE';
+
+            // 지식 데이터베이스 로드
+            const savedKnowledge = localStorage.getItem('knowledge_base');
+            if (savedKnowledge) {
+                document.getElementById('knowledgeEditor').value = savedKnowledge;
+            } else {
+                loadDefaultKnowledge();
+            }
+        }
+
+        function saveSettings() {
+            localStorage.setItem('gemini_api_key', document.getElementById('apiKey').value);
+            localStorage.setItem('sheet_id', document.getElementById('sheetId').value);
+            alert('설정이 저장되었습니다!');
+        }
+
+        // 지식 데이터베이스를 마크다운에서 객체로 파싱
+        function parseMarkdownToKnowledge(markdown) {
+            const newKnowledgeBase = {};
+            const categories = markdown.split(/^---+$/gm).filter(s => s.trim());
+
+            categories.forEach(categoryText => {
+                const lines = categoryText.trim().split('\n');
+                let categoryName = '';
+                let categoryKey = '';
+                let currentQuestion = null;
+                let currentAnswer = '';
+                let currentFollowUp = [];
+                const questions = [];
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    // 카테고리명 (## Title)
+                    if (line.startsWith('## ')) {
+                        categoryName = line.substring(3).trim();
+                        categoryKey = categoryName.replace(/\s+/g, '_').toLowerCase();
+                    }
+                    // 질문 (### Question)
+                    else if (line.startsWith('### ')) {
+                        // 이전 질문 저장
+                        if (currentQuestion) {
+                            questions.push({
+                                q: currentQuestion,
+                                a: currentAnswer.trim(),
+                                followUp: currentFollowUp
+                            });
+                        }
+
+                        currentQuestion = line.substring(4).trim();
+                        currentAnswer = '';
+                        currentFollowUp = [];
+                    }
+                    // 추천 질문 ([추천: q1, q2])
+                    else if (line.startsWith('[추천:')) {
+                        const followUpText = line.replace(/\[추천:\s*/, '').replace(/\]$/, '');
+                        currentFollowUp = followUpText.split(',').map(q => q.trim()).filter(q => q);
+                    }
+                    // 답변 내용
+                    else if (currentQuestion && line) {
+                        currentAnswer += (currentAnswer ? '\n' : '') + line;
+                    }
+                });
+
+                // 마지막 질문 저장
+                if (currentQuestion) {
+                    questions.push({
+                        q: currentQuestion,
+                        a: currentAnswer.trim(),
+                        followUp: currentFollowUp
+                    });
+                }
+
+                if (categoryName && questions.length > 0) {
+                    newKnowledgeBase[categoryKey] = {
+                        title: categoryName,
+                        questions: questions
+                    };
+                }
+            });
+
+            return newKnowledgeBase;
+        }
+
+        // 지식 데이터베이스 객체를 마크다운으로 변환
+        function knowledgeToMarkdown(kb) {
+            let markdown = '';
+
+            Object.values(kb).forEach((category, index) => {
+                if (index > 0) markdown += '\n---\n\n';
+
+                markdown += `## ${category.title} \n\n`;
+
+                category.questions.forEach(q => {
+                    markdown += `### ${q.q} \n`;
+                    markdown += `${q.a} \n\n`;
+                    if (q.followUp && q.followUp.length > 0) {
+                        markdown += `[추천: ${q.followUp.join(', ')}]\n`;
+                    }
+                    markdown += '\n';
+                });
+            });
+
+            return markdown.trim();
+        }
+
+        // 지식 저장
+        function saveKnowledge() {
+            const markdown = document.getElementById('knowledgeEditor').value;
+
+            try {
+                const parsedKnowledge = parseMarkdownToKnowledge(markdown);
+
+                // 검증
+                if (Object.keys(parsedKnowledge).length === 0) {
+                    alert('올바른 형식으로 작성해주세요.\n\n## 카테고리\n### 질문\n답변\n[추천: 질문]');
+                    return;
+                }
+
+                // 저장
+                localStorage.setItem('knowledge_base', markdown);
+
+                // knowledgeBase 전역 변수 업데이트 (REPLACE logic)
+                for (let key in knowledgeBase) delete knowledgeBase[key];
+                Object.assign(knowledgeBase, parsedKnowledge);
+
+                alert('지식 데이터베이스가 저장되었습니다!\n페이지를 새로고침하면 적용됩니다.');
+
+                // 자동 새로고침
+                setTimeout(() => location.reload(), 1000);
+            } catch (error) {
+                alert('저장 중 오류가 발생했습니다: ' + error.message);
+            }
+        }
+
+        // 내보내기
+        function exportKnowledge() {
+            const markdown = document.getElementById('knowledgeEditor').value;
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'knowledge_base.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 기본값 복원
+        function loadDefaultKnowledge() {
+            const defaultMarkdown = knowledgeToMarkdown(INITIAL_KNOWLEDGE);
+            document.getElementById('knowledgeEditor').value = defaultMarkdown;
+        }
+
+        function loadSettings() {
+            // 버전 체크 및 강제 업데이트
+            const savedVersion = localStorage.getItem('app_version');
+            if (savedVersion !== APP_VERSION) {
+                localStorage.removeItem('knowledge_base');
+                localStorage.removeItem('gemini_api_key');
+                localStorage.removeItem('sheet_id');
+                localStorage.setItem('app_version', APP_VERSION);
+                // 기본값으로 시작
+                return;
+            }
+
+            // 저장된 지식 불러오기
+            const savedKnowledge = localStorage.getItem('knowledge_base');
+            if (savedKnowledge) {
+                try {
+                    const parsedKnowledge = parseMarkdownToKnowledge(savedKnowledge);
+                    // REPLACE logic to avoid doubling
+                    for (let key in knowledgeBase) delete knowledgeBase[key];
+                    Object.assign(knowledgeBase, parsedKnowledge);
+                } catch (error) {
+                    console.error('지식 데이터베이스 로드 실패:', error);
+                }
+            }
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+
+</html>
